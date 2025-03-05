@@ -1,0 +1,33 @@
+{
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"src/**/**/*.tsx",
+    "src/**/**/**/*.tsx",
+    "src/**/**/**/**/*.tsx",
+    "src/**/**/**/**/**/*.tsx",
+		"src/**/*.d.ts",
+		"src/main.js",
+		"src/**/**/*.ts",
+		"src/**/**/*.js",
+		"src/**/**/**/*.js"
+	],
+	"exclude": ["src/**/__tests__/*"],
+	"compilerOptions": {
+		"composite": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"]
+		},
+		"types": ["vite/client"],
+		"allowJs": true,
+		"strict": false,
+		"jsx": "preserve",
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"lib": ["esnext", "dom"]
+		// "noUnusedLocals": true,
+		// "noUncheckedIndexedAccess": true
+	}
+}

@@ -1,0 +1,42 @@
+
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
+}
+
+
+
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "useDefineForClassFields": true, //将 class 声明中的字段语义从 [[Set]] 变更到 [[Define]]
+
+//     "lib": ["ES2020", "DOM", "DOM.Iterable"],    // 指定要包含在编译中的库文件,如未指定会根据target注入默认列表
+
+//     "module": "ESNext", // 指定要使用的模板标准
+//     "skipLibCheck": false, //skipLibCheck
+
+//     /* Bundler mode */
+//     "moduleResolution": "bundler", //用于选择模块解析策略，有'node'和'classic'两种类型
+//     "allowImportingTsExtensions": true,
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "noEmit": true,
+//     "jsx": "react-jsx",
+
+//     /* Linting */
+//     "strict": false,
+//     "noUnusedLocals": false, // 用于检查是否有定义了但是没有使用变量
+//     "noUnusedParameters": false, // 用于检测是否在函数中没有使用的参数
+//     "noFallthroughCasesInSwitch": true
+//   },
+//   "include": ["src"],
+//   "references": [{ "path": "./tsconfig.node.json" }]
+// }
