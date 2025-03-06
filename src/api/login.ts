@@ -16,3 +16,20 @@ export const register = (userInfo: {}) => {
   })
 }
 
+export const getUserInfo = (params: {}) => {
+  return request({
+    url: '/api/v1/auth/user',
+    method: 'get',
+    params
+  })
+}
+
+export const updateUser = (data: {}) => {
+  return request({
+    url: '/api/v1/auth/update/user',
+    method: 'post',
+    data
+  })
+}
+
+

@@ -10,6 +10,7 @@ import Contact, { loader as contactLoader, action as contactAction, } from "./ro
 import Home from "./routes/home/index";
 import Login from "./routes/login";
 import Register from "./routes/register";
+import Base from "./routes/base";
 import ErrorPage from "./error-page";
 import Index from "./routes/index";
 import EditContact, {
@@ -62,6 +63,10 @@ const router = createHashRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/base",
+    element: <Base />,
   }
   // {
   //   path: "contacts/:contactId",

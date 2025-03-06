@@ -18,6 +18,7 @@ body {
   margin: 0;
   line-height: 1.5;
   color: #121212;
+  box-sizing: border-box;
 }
 
 button {
@@ -26,7 +27,6 @@ button {
 }
 
 #root {
-  display: flex;
   height: 100%;
   width: 100%;
 }

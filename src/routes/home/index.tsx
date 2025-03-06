@@ -5,14 +5,7 @@ import Menus from './menus'
 import DeskHeaderComponents from './desk-header'
 const { Header, Footer, Sider, Content } = Layout;
 
-const headerStyle: React.CSSProperties = {
-  // paddingInline: 48,
-  // lineHeight: '64px',
-  backgroundColor: '#fff',
-  width: "100%",
-  color: '#333',
-  top: 0,
-};
+
 
 const contentStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -42,11 +35,9 @@ const Home: React.FC = () => (
   <>
     <Layout style={layoutStyle}>
       {/* <Menus/> */}
-      <Header style={headerStyle}>
-        <DeskHeaderComponents />
-      </Header>
+      <DeskHeaderComponents />
       <Content style={contentStyle}>
-        {/* <AnchorComponent /> */}
+        <AnchorComponent />
       </Content>
       <Footer style={footerStyle}>Footer</Footer>
     </Layout>

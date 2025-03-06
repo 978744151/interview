@@ -59,7 +59,6 @@ const Register: React.FC = () => {
             <Form.Item<FieldType>
               label="name"
               name="name"
-              rules={[{ required: true, message: 'Please input your name!' }]}
             >
               <Input />
             </Form.Item>
@@ -67,7 +66,6 @@ const Register: React.FC = () => {
             <Form.Item<FieldType>
               label="email"
               name="email"
-              rules={[{ required: true, message: 'Please input your email!' }]}
             >
               <Input />
             </Form.Item>
@@ -75,7 +73,6 @@ const Register: React.FC = () => {
             <Form.Item<FieldType>
               label="Password"
               name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input.Password />
             </Form.Item>

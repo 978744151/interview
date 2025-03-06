@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Checkbox, Form, type FormProps, Input, theme, message } from 'antd';
-import { loginUser } from '@/api/login'
+import { loginUser, getUserInfo } from '@/api/login'
 import { setStore } from '@/utils/store'
 import { useNavigate } from "react-router-dom";
 import website from '@/plugins/website'
@@ -13,7 +13,8 @@ type FieldType = {
 
 const containerStyle = {
   backgroundColor: theme.defaultSeed.colorPrimary,
-  width: '100%'
+  width: '100%',
+  height: '100%'
 }
 const formStyle = {
 
@@ -31,15 +32,24 @@ const Login: React.FC = () => {
     const { data } = await loginUser(values)
     if (data.success) {
       setStore({ type: 'local', content: data.token, name: 'token' })
+      getUserInfoFunc()
       messageApi.open({
         type: 'success',
-        content: '登陆成功',
+        content: '登录成功',
       });
+
       setTimeout(() => {
-        navigate('/desk')
+        navigate('/', { replace: true })
       }, 1000);
     }
   };
+  const getUserInfoFunc = () => {
+    getUserInfo({}).then(({ data }: any) => {
+      if (data.success) {
+        setStore({ type: 'local', content: data.data, name: 'userInfo' })
+      }
+    })
+  }
   const handleRegister = () => {
     navigate('/register')
   }
