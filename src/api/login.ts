@@ -16,9 +16,9 @@ export const register = (userInfo: {}) => {
   })
 }
 
-export const getUserInfo = (params: {}) => {
+export const getUserInfo = (params: {id:''}) => {
   return request({
-    url: '/api/v1/auth/user',
+    url: `/api/v1/auth/me`,
     method: 'get',
     params
   })
@@ -26,8 +26,8 @@ export const getUserInfo = (params: {}) => {
 
 export const updateUser = (data: {}) => {
   return request({
-    url: '/api/v1/auth/update/user',
-    method: 'post',
+    url: '/api/v1/auth/updatedetails',
+    method: 'put',
     data
   })
 }

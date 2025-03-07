@@ -11,7 +11,7 @@ const instancs = axios.create(baseRequestConfig)
 instancs.interceptors.request.use(
   (config: newAxiosRequestConfig) => {
     config.headers = {
-      'authorization': getStore({name: 'token'})
+      'authorization': 'Bearer '+getStore({name: 'token'})
     }
     return config
   },

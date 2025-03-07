@@ -11,6 +11,9 @@ import Home from "./routes/home/index";
 import Login from "./routes/login";
 import Register from "./routes/register";
 import Base from "./routes/base";
+import Game1 from "./routes/game/game1";
+import Game2 from "./routes/game/game2";
+
 import ErrorPage from "./error-page";
 import Index from "./routes/index";
 import EditContact, {
@@ -67,6 +70,14 @@ const router = createHashRouter([
   {
     path: "/base",
     element: <Base />,
+  },
+  {
+    path: "/game1",
+    element: <Game1 />,
+  },
+  {
+    path: "/game2",
+    element: <Game2 />,
   }
   // {
   //   path: "contacts/:contactId",

@@ -3,6 +3,8 @@ import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Space, Divider, theme, Layout } from 'antd';
 import { useNavigate } from "react-router-dom";
+import { getStore } from '@/utils/store';
+
 const { useToken } = theme;
 const { Header } = Layout;
 const headerStyle: React.CSSProperties = {
@@ -12,6 +14,10 @@ const headerStyle: React.CSSProperties = {
   top: 0,
   borderBottom: '1px solid #eee',
 };
+const titleStyle: React.CSSProperties = {
+  fontSize: '14px',
+  cursor: 'pointer',
+}
 const headerRightComponents: React.FC = () => {
   const { token } = useToken();
   const navigate = useNavigate();
@@ -63,8 +69,8 @@ const headerRightComponents: React.FC = () => {
       >
         <a onClick={(e) => e.preventDefault()}>
           <Space>
-            欢迎光临
-            <DownOutlined />
+            {getStore({ name: 'userInfo' })?.name}
+            < DownOutlined />
           </Space>
         </a>
       </Dropdown>
@@ -74,15 +80,17 @@ const headerRightComponents: React.FC = () => {
 }
 
 const DeskHeaderComponents: React.FC = () => {
+  const navigate = useNavigate();
+  const handleToHome = () => {
+    navigate('/')
+  }
   return (
-    <Layout>
-      <Header style={headerStyle}>
-        <div className="flex justify-between">
-          <div>我想睡觉</div>
-          {headerRightComponents({}, {})}
-        </div>
-      </Header>
-    </Layout>
+    <Header style={headerStyle}>
+      <div className="flex justify-between">
+        <div style={titleStyle} onClick={handleToHome}>哈咯</div>
+        {headerRightComponents({}, {})}
+      </div>
+    </Header>
   );
 }
 
