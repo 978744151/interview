@@ -6,8 +6,10 @@ import DeskHeaderComponents from './desk-header'
 import { Row, Col, Card, Typography, Skeleton } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 const { Title } = Typography;
-import { getBlogList } from '@/api/log';
+import { getBlogList, createBlog } from '@/api/log';
 import { useEffect, useState } from 'react';
+import { getStore } from '@/utils/store';
+
 // 在现有样式后添加
 const blogListStyle: React.CSSProperties = {
   marginTop: 40,
@@ -64,7 +66,10 @@ const Home: React.FC = () => {
   }, [])
   const fetchBlogs = async () => {
     const { data } = await getBlogList({ page: 1, pageSize: 10 });
+    setBlogs(data.data)
+    setLoading(false)
     // 处理数据...
+    const { datas } = await createBlog({ title: 123, userId: getStore({ name: 'userInfo' })?._id })
   }
   return (<>
     <Layout style={layoutStyle}>

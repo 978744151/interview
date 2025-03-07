@@ -11,5 +11,11 @@ export const getBlogList = (params: { page: number; pageSize: number }) => {
       }
     })
   }
-  
+  export const createBlog= ( data:any) => {
+    return request({
+      url: '/api/v1/blogs',
+      method: 'post',
+      data
+    })
+  }
   // 已有updateUser接口...
