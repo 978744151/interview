@@ -62,14 +62,16 @@ const Home: React.FC = () => {
   const [blogs, setBlogs] = useState<any[]>([]);
 
   useEffect(() => {
+    setLoading(true)
     fetchBlogs()
   }, [])
   const fetchBlogs = async () => {
+    const { datas } = await createBlog({ title: 123,summary:'关于本次会议纪要',})
+
     const { data } = await getBlogList({ page: 1, pageSize: 10 });
     setBlogs(data.data)
     setLoading(false)
     // 处理数据...
-    const { datas } = await createBlog({ title: 123, userId: getStore({ name: 'userInfo' })?._id })
   }
   return (<>
     <Layout style={layoutStyle}>
@@ -78,7 +80,7 @@ const Home: React.FC = () => {
         <AnchorComponent />
 
         {/* 新增分类模块 */}
-        <div style={categoryStyle}>
+        {/* <div style={categoryStyle}>
           <Title level={4} style={{ marginBottom: 24 }}>热门分类</Title>
           <Row gutter={[16, 16]}>
             {['前端开发', '后端架构', '数据科学', '人工智能'].map((name) => (
@@ -91,7 +93,7 @@ const Home: React.FC = () => {
               </Col>
             ))}
           </Row>
-        </div>
+        </div> */}
         {/* 新增博客列表 */}
         <div style={blogListStyle}>
           <Title level={4} style={{ marginBottom: 24 }}>最新文章</Title>
@@ -105,14 +107,14 @@ const Home: React.FC = () => {
                       alt={blog.title}
                       style={{
                         width: '100%',
-                        height: 200,
+                        height: 100,
                         objectFit: 'cover',
                         borderTopLeftRadius: 8,
                         borderTopRightRadius: 8
                       }}
                     />
                     <div style={{ padding: 20 }}>
-                      <h3 style={{ marginBottom: 8, fontSize: 18 }}>{blog.title}</h3>
+                      <span style={{ marginBottom: 8, fontSize: 18 }}>{blog.title}</span>
                       <p style={{
                         color: '#666',
                         lineHeight: 1.6,
