@@ -18,4 +18,18 @@ export const getBlogList = (params: { page: number; pageSize: number }) => {
       data
     })
   }
-  // 已有updateUser接口...
+  export const updateBlog= ( id:any,data) => {
+    return request({
+      url: `/api/v1/blogs/${id}`,
+      method: 'put',
+      data
+    })
+  }
+
+  // 在现有接口后添加
+export const getBlogDetail = (id: string) => {
+    return request({
+      url: `/api/v1/blogs/${id}`,
+      method: 'get'
+    })
+  }

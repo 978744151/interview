@@ -13,48 +13,53 @@ import Register from "./routes/register";
 import Base from "./routes/base";
 import Game1 from "./routes/game/game1";
 import Game2 from "./routes/game/game2";
+import BlogCreate from "./routes/blog/create";
+import BlogPreview from "./routes/blog/preview";
+import BlogUpdate from "./routes/blog/update";
 
 import ErrorPage from "./error-page";
 import Index from "./routes/index";
+import MainLayout from '@/layouts/MainLayout'
+
 import EditContact, {
   action as editAction,
 } from "./routes/edit";
 import './index.css'
 import { action as destroyAction } from "./routes/destroy";
 const router = createHashRouter([
-  {
-    path: "/home",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    loader: rootLoader,
-    action: rootAction,
-    children: [
-      {
-        errorElement: <ErrorPage />,
-        children: [
-          { index: true, element: <Index /> },
-          {
-            path: "contacts/:contactId",
-            element: <Contact />,
-            loader: contactLoader,
-            action: contactAction
-          },
-          {
-            path: "contacts/:contactId/edit",
-            element: <EditContact />,
-            loader: contactLoader,
-            action: editAction,
-          },
-          {
-            path: "contacts/:contactId/destroy",
-            action: destroyAction,
-            errorElement: <div>Oops! There was an error.</div>,
-          }
-          /* the rest of the routes */
-        ],
-      }
-    ],
-  },
+  // {
+  //   path: "/home",
+  //   element: <Root />,
+  //   errorElement: <ErrorPage />,
+  //   loader: rootLoader,
+  //   action: rootAction,
+  //   children: [
+  //     {
+  //       errorElement: <ErrorPage />,
+  //       children: [
+  //         { index: true, element: <Index /> },
+  //         {
+  //           path: "contacts/:contactId",
+  //           element: <Contact />,
+  //           loader: contactLoader,
+  //           action: contactAction
+  //         },
+  //         {
+  //           path: "contacts/:contactId/edit",
+  //           element: <EditContact />,
+  //           loader: contactLoader,
+  //           action: editAction,
+  //         },
+  //         {
+  //           path: "contacts/:contactId/destroy",
+  //           action: destroyAction,
+  //           errorElement: <div>Oops! There was an error.</div>,
+  //         }
+  //         /* the rest of the routes */
+  //       ],
+  //     }
+  //   ],
+  // },
   {
     path: "/",
     element: <Home />,
@@ -78,6 +83,24 @@ const router = createHashRouter([
   {
     path: "/game2",
     element: <Game2 />,
+  },
+  {
+    path: 'blog',
+    element: <MainLayout />,
+    children: [
+      {
+        path: "create",
+        element: <BlogCreate />,
+      },
+      {
+        path: ":id",
+        element: <BlogPreview />,
+      },
+      {
+        path: "update/:id",
+        element: <BlogUpdate />,
+      }
+    ]
   }
   // {
   //   path: "contacts/:contactId",

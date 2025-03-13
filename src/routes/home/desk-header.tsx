@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Dropdown, Space, Divider, theme, Layout } from 'antd';
+import { Dropdown, Space, Divider, theme, Layout, Button, Typography } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { getStore } from '@/utils/store';
+const { Text } = Typography;
 
 const { useToken } = theme;
 const { Header } = Layout;
@@ -55,8 +56,29 @@ const headerRightComponents: React.FC = () => {
   const menuStyle: React.CSSProperties = {
     boxShadow: 'none',
   };
+  // 新增新建博客跳转
+  const handleCreateBlog = () => {
+    navigate('/blog/create');
+  }
+
   return (
-    <>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={handleCreateBlog}
+        style={{
+          borderRadius: 6,
+          padding: '0 20px',
+          height: 36,
+          background: '#1890ff',
+          border: 'none',
+          boxShadow: '0 2px 4px rgba(24,144,255,0.2)',
+          transition: 'all 0.3s',
+        }}
+      >
+        新建博客
+      </Button>
 
       <Dropdown
         menu={{ items }}
@@ -67,15 +89,24 @@ const headerRightComponents: React.FC = () => {
           </div>
         )}
       >
-        <a onClick={(e) => e.preventDefault()}>
-          <Space>
-            {getStore({ name: 'userInfo' })?.name}
-            < DownOutlined />
+        <a onClick={(e) => e.preventDefault()} style={{ display: 'block' }}>
+          <Space
+            style={{
+              borderRadius: 6,
+              transition: 'background 0.3s',
+              cursor: 'pointer',
+              ':hover': { background: '#f5f5f5' }
+            }}
+          >
+            <UserOutlined style={{ color: '#666', fontSize: 16 }} />
+            <Text strong style={{ color: '#333' }}>
+              {getStore({ name: 'userInfo' })?.name}
+            </Text>
+            <DownOutlined style={{ color: '#666', fontSize: 12 }} />
           </Space>
         </a>
       </Dropdown>
-
-    </>
+    </div>
   );
 }
 
@@ -86,8 +117,8 @@ const DeskHeaderComponents: React.FC = () => {
   }
   return (
     <Header style={headerStyle}>
-      <div className="flex justify-between">
-        <div style={titleStyle} onClick={handleToHome}>哈咯</div>
+      <div className="flex justify-between align-center">
+        <div style={titleStyle} onClick={handleToHome}>幻殇</div>
         {headerRightComponents({}, {})}
       </div>
     </Header>

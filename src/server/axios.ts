@@ -5,7 +5,7 @@ import { getStore } from '../utils/store'
 import { message } from 'antd'
 axios.defaults.timeout = 30000
 const baseRequestConfig: AxiosRequestConfig = {
-  baseURL: '/',
+  baseURL: import.meta.env.VITE_BASE_URL
 }
 const instancs = axios.create(baseRequestConfig)
 instancs.interceptors.request.use(
