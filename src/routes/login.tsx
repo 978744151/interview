@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Form, type FormProps, Input, theme, message } from 'antd';
+import { Button, Checkbox, Form, type FormProps, Input, theme, message, Row, Col } from 'antd';
 import { loginUser, getUserInfo } from '@/api/login'
 import { setStore } from '@/utils/store'
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,8 @@ type FieldType = {
 const containerStyle = {
   backgroundColor: theme.defaultSeed.colorPrimary,
   width: '100%',
-  height: '100%'
+  height: '100vh',
+  overflow: 'hidden',
 }
 const formStyle = {
 
@@ -56,12 +57,27 @@ const Login: React.FC = () => {
   return (
     <>
       {contextHolder}
-      <div style={containerStyle} className='flex flex-row-reverse'>
-        <div style={formStyle} className="p-28 bg-white flex justify-center items-center">
+
+      <Row justify="center" align="middle" style={containerStyle} className='p-[12px]'>
+        <Col xs={24} md={12} lg={10} xl={8} className="m-4 p-4 md:p-8 bg-white rounded-lg shadow-xl">
+          <Col xs={24} md={24} className="text-center mb-8 md:mb-8 md:pr-8">
+            <h1 className="text-5xl md:text-6xl font-bold text-white animate-float">
+              <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
+                幻
+              </span>
+              <span className="bg-gradient-to-r from-blue-400 via-green-400 to-yellow-300 bg-clip-text text-transparent">
+                殇
+              </span>
+            </h1>
+            <p className="mt-4 text-xl text-gray-200 font-mono tracking-wider">
+              Digital Collection Universe
+            </p>
+          </Col>
           <Form
-            className="w-96"
+            className="w-full"
+            labelCol={{ xs: 24, md: 8 }}
+            wrapperCol={{ xs: 24, md: 16 }}
             name="basic"
-            labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
             initialValues={{ remember: true }}
@@ -70,16 +86,19 @@ const Login: React.FC = () => {
             autoComplete="off"
           >
             <Form.Item<FieldType>
-              label="email"
+              label="邮箱"
               name="email"
+              labelAlign="left"
               rules={[{ required: true, message: 'Please input your email!' }]}
             >
               <Input />
             </Form.Item>
 
             <Form.Item<FieldType>
-              label="Password"
+              label="密码"
               name="password"
+              labelAlign="left"
+
               rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input.Password />
@@ -93,23 +112,31 @@ const Login: React.FC = () => {
               <Checkbox>Remember me</Checkbox>
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }} >
-              <div className="flex justify-between">
-                <Button onClick={handleRegister} >
-                  register
+            <Form.Item wrapperCol={{ xs: 24, md: { offset: 8, span: 16 } }}>
+              <div className="flex flex-col md:flex-row gap-2 justify-between">
+                <Button
+                  onClick={handleRegister}
+                  size="large"
+                  className="md:order-1"
+                >
+                  注册
                 </Button>
-                <Button type="primary" htmlType="submit" >
-                  Submit
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  className="w-full md:w-auto"
+                >
+                  登录
                 </Button>
               </div>
             </Form.Item>
           </Form>
-
-        </div>
-        <div className='flex-1 flex justify-center items-center'>
-          <span className='text-6xl font-serif text-white'>{website.title}</span>
-        </div>
-      </div>
+        </Col>
+      </Row>
+      {/* <div className='flex-1 flex justify-center items-center'>
+        <span className='text-6xl font-serif text-white'>{website.title}</span>
+      </div> */}
     </>
   )
 };

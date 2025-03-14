@@ -91,6 +91,14 @@ const Home: React.FC = () => {
     // 处理点击事件...
     navigate(`/blog/${blog._id}`);
   };
+  const handleGames = (index: number) => {
+    if (index) {
+      navigate(`/game/game${index + 1}`);
+    } else {
+      navigate(`/nft/digitalCollectionPage`);
+    }
+
+  }
   return (
     <>
       <Layout style={layoutStyle}>
@@ -102,12 +110,13 @@ const Home: React.FC = () => {
           <div style={categoryStyle}>
             <Title level={4} style={{ marginBottom: 24 }}>热门分类</Title>
             <Row gutter={[16, 16]}>
-              {['前端开发', '后端架构', '数据科学', '人工智能'].map((name) => (
+              {['数字藏品', '数字猜谜游戏', '记忆卡牌游戏', '贪吃蛇', '日期计算器',].map((name, index) => (
                 <Col span={6} key={name}>
                   <Card
                     hoverable
+                    onClick={() => handleGames(index)}
                   >
-                    <Card.Meta title={name} description="相关岗位数量：128" />
+                    <Card.Meta title={name} description="" />
                   </Card>
                 </Col>
               ))}

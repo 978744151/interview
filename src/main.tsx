@@ -11,8 +11,13 @@ import Home from "./routes/home/index";
 import Login from "./routes/login";
 import Register from "./routes/register";
 import Base from "./routes/base";
+import Game0 from "./routes/game/game0";
 import Game1 from "./routes/game/game1";
 import Game2 from "./routes/game/game2";
+import Game3 from "./routes/game/game3";
+
+import Game4 from "./routes/game/game4";
+import DigitalCollectionPage from "./routes/nft/index";
 import BlogCreate from "./routes/blog/create";
 import BlogPreview from "./routes/blog/preview";
 import BlogUpdate from "./routes/blog/update";
@@ -77,13 +82,42 @@ const router = createHashRouter([
     element: <Base />,
   },
   {
-    path: "/game1",
-    element: <Game1 />,
+    path: "/nft",
+    element: <MainLayout />,
+    children: [
+      {
+        path: "digitalCollectionPage",
+        element: <DigitalCollectionPage />,
+      },]
+
   },
   {
-    path: "/game2",
-    element: <Game2 />,
+    path: "/game",
+    element: <MainLayout />,
+    children: [
+      {
+        path: "game0",
+        element: <Game0 />,
+      },
+      {
+        path: "game1",
+        element: <Game1 />,
+      },
+      {
+        path: "game2",
+        element: <Game2 />,
+      },
+      {
+        path: "Game3",
+        element: <Game3 />,
+      },
+      {
+        path: "game4",
+        element: <Game4 />,
+      },
+    ]
   },
+
   {
     path: 'blog',
     element: <MainLayout />,
@@ -101,6 +135,10 @@ const router = createHashRouter([
         element: <BlogUpdate />,
       }
     ]
+  },
+  {
+    path: "*",
+    element: <Home />,
   }
   // {
   //   path: "contacts/:contactId",
