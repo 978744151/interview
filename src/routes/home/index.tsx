@@ -93,7 +93,7 @@ const Home: React.FC = () => {
   };
   const handleGames = (index: number) => {
     if (index) {
-      navigate(`/game/game${index + 1}`);
+      navigate(`/game/game${index}`);
     } else {
       navigate(`/nft/digitalCollectionPage`);
     }
