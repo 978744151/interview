@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Input, Select, Typography, Tag, Skeleton, Button } from 'antd';
-import { useNavigation } from '@/hooks/useNavigation';
-import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
+import { useNavigation } from '@/hooks/useNavigation.ts';
+import { getNftList, getNftsList } from '@/api/nft.ts'
+import { div } from 'framer-motion/client';
+import { AppstoreOutlined, BarsOutlined, HeartFilled } from '@ant-design/icons';
+
 const { Meta } = Card;
 const { Title, Text } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
-// 模拟数据
-const categories = [
-    { id: 1, name: '数字艺术', cover: 'https://picsum.photos/200/150?art' },
-    { id: 2, name: '游戏资产', cover: 'https://picsum.photos/200/150?game' },
-    { id: 3, name: '音乐NFT', cover: 'https://picsum.photos/200/150?music' },
-    { id: 4, name: '虚拟地产', cover: 'https://picsum.photos/200/150?land' },
-];
 
 const collections = [
     { id: 1, category: 1, name: '加密朋克#123', price: '1.2 ETH', author: 'CryptoArtist', likes: 2345 },
@@ -24,19 +20,50 @@ const collections = [
 ];
 
 const DigitalCollectionPage = () => {
-    const { goBack } = useNavigation();
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid'); // 新增视图状态
+    const { goBack, navigate } = useNavigation();
+    const [viewMode, setViewMode] = useState<any>('grid'); // 新增视图状态
+    const [categories, setCategories] = useState<any>([])
+    const [collections, setCollections] = useState<any>([])
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [sortBy, setSortBy] = useState('popular');
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data } = await getNftList({})
+                if (data.success) {
+                    setCategories(data.data)
+                    getNfts(data.data[0]._id)
+                }
+            } catch (error) {
+                console.error('获取博客详情失败:', error)
+                navigate('/')
+            } finally {
 
+            }
+        }
+
+        fetchData()
+    }, [])
+    const getNfts = async (category: string) => {
+        const { data } = await getNftsList({ page: 1, perPage: 10, category })
+        setCollections(data.data.data)
+    }
+    const handleNextPage = (path: string) => {
+        // 使用 useNavigation 的 navigate 方法进行页面跳转
+        navigate(path)
+    };
+    const handleSetSelectedCategory = (categoryId: string) => {
+        console.log(categoryId)
+        getNfts(categoryId)
+    };
     const filteredCollections = collections
-        .filter(item => {
-            const matchCategory = !selectedCategory || item.category === selectedCategory;
+        .filter((item: any) => {
+            const matchCategory = !selectedCategory || item.category._id === selectedCategory;
             const matchSearch = item.name.toLowerCase().includes(searchKeyword.toLowerCase());
             return matchCategory && matchSearch;
         })
-        .sort((a, b) => sortBy === 'popular' ? b.likes - a.likes : a.price.localeCompare(b.price));
+    // .sort((a, b) => sortBy === 'popular' ? b.likes - a.likes : a.price.localeCompare(b.price));
 
     return (
         <>
@@ -44,24 +71,24 @@ const DigitalCollectionPage = () => {
                 {/* <Button onClick={goBack} style={{ marginBottom: 24 }}>返回</Button> */}
 
                 {/* 分类导航 */}
-                <div style={{ marginBottom: 40 }}>
+                <div style={{ marginBottom: 12 }}>
                     {/* <Title level={2} style={{ marginBottom: 24 }}>数字藏品分类</Title> */}
                     <div style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '8px 0' }}>
-                        {categories.map(category => (
+                        {categories.map((category: any) => (
                             <Card
-                                key={category.id}
+                                key={category._id}
                                 hoverable
                                 style={{
                                     width: 200,
-                                    border: selectedCategory === category.id ? '2px solid #1890ff' : 'none',
+                                    border: selectedCategory === category._id ? '2px solid #1890ff' : 'none',
                                     borderRadius: 8
                                 }}
-                                onClick={() => setSelectedCategory(prev => prev === category.id ? null : category.id)}
-                                cover={<img alt={category.name} src={category.cover} style={{ height: 100 }} />}
+                                onClick={() => handleSetSelectedCategory(category._id)}
+                                cover={<img alt={category.name} src={category.cover} style={{ height: 100, objectFit: 'cover' }} />}
                             >
                                 <Meta
                                     title={category.name}
-                                    description={<Tag color="#108ee9">{collections.filter(c => c.category === category.id).length} 件藏品</Tag>}
+                                // description={<Tag color="#108ee9">{collections.filter(c => c.category === category._id).length} 件藏品</Tag>}
                                 />
                             </Card>
                         ))}
@@ -100,9 +127,9 @@ const DigitalCollectionPage = () => {
 
                 {/* // 修改藏品列表部分 */}
                 <Row gutter={viewMode === 'grid' ? [12, 12] : [12, 12]}>
-                    {filteredCollections.map(item => (
+                    {filteredCollections.map((item: any) => (
                         <Col
-                            key={item.id}
+                            key={item._id}
                             xs={viewMode === 'grid' ? 12 : 24}
                             sm={viewMode === 'grid' ? 12 : 24}
                             md={viewMode === 'grid' ? 8 : 24}
@@ -110,38 +137,72 @@ const DigitalCollectionPage = () => {
                         >
                             {viewMode === 'grid' && <Card
                                 hoverable
+                                onClick={() => handleNextPage(`/nft/goods/${item.id}`)}
                                 bodyStyle={{
                                     padding: 16,
                                     // 新增间距控制
                                     boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                                 }}
                                 cover={
-                                    <img
-                                        alt={item.name}
-                                        src={`https://picsum.photos/400/300?${item.id}`}
-                                        style={{
-                                            height: viewMode === 'list' ? 100 : 200,
-                                            objectFit: 'cover',
-                                        }}
-                                    />
+                                    <div style={{
+                                        backgroundImage: `url(${item.imageUrl})`,
+                                        backgroundPosition: 'center',
+                                        backgroundSize: 'cover',
+                                        backgroundRepeat: 'no-repeat',
+                                        height: "200px",
+                                        width: "100%",
+                                    }}>
+
+                                    </div>
+                                    // <img
+                                    //     alt={item.name}
+                                    //     src={item.imageUrl}
+                                    //     style={{
+                                    //         height: viewMode === 'list' ? 100 : 285,
+                                    //         objectFit: 'cover',
+                                    //     }}
+                                    // />
                                 }
                             >
                                 <Meta
                                     title={
-                                        <Text
-                                            ellipsis
-                                            style={{
-                                                fontSize: viewMode === 'list' ? 14 : 16,
-                                                marginBottom: 4
-                                            }}
-                                        >
-                                            {item.name}
-                                        </Text>
+                                        <div>
+                                            <Text
+                                                ellipsis
+                                                style={{
+                                                    fontSize: viewMode === 'list' ? 14 : 16,
+                                                    marginBottom: 4
+                                                }}
+                                            >
+                                                {item.name}
+                                            </Text>
+                                            <div className='flex'>
+                                                <div style={{
+                                                    fontSize: 9, color: '#666', marginTop: 4,
+                                                    border: '1px solid #f0f0f0',
+                                                    borderRadius: '4px',
+                                                    padding: '4px 8px',
+                                                    display: 'flex',
+                                                }}>
+                                                    发行: {item.quantity || 1000}
+                                                </div>
+                                                <div style={{
+                                                    fontSize: 9, color: '#666', marginTop: 4,
+                                                    border: '1px solid #f0f0f0',
+                                                    borderRadius: '4px',
+                                                    padding: '4px 8px',
+                                                    display: 'flex',
+                                                }}>
+                                                    流通: {item.circulatingSupply || 856}
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     }
                                     description={
                                         <div style={{
                                             display: 'flex',
-                                            flexDirection: viewMode === 'list' ? 'row' : 'column',
+                                            flexDirection: viewMode === 'list' ? 'row' : 'row',
                                             justifyContent: 'space-between',
                                             alignItems: viewMode === 'list' ? 'center' : 'flex-start',
                                             gap: 8
@@ -150,36 +211,28 @@ const DigitalCollectionPage = () => {
                                                 color: '#1890ff',
                                                 fontSize: viewMode === 'list' ? 14 : 16
                                             }}>
-                                                {item.price}
+                                                ¥{item.price}
                                             </Text>
-                                            <div style={{
-                                                display: 'flex',
-                                                gap: 8,
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text type="secondary">{item.author}</Text>
-                                                <Text type="secondary">·</Text>
-                                                <Text>
-                                                    {/* <HeartFilled style={{ marginRight: 4 }} /> */}
-                                                    {item.likes.toLocaleString()}
-                                                </Text>
-                                            </div>
+                                            <Text>
+                                                {item.likes || 99}
+                                            </Text>
                                         </div>
                                     }
                                 />
                             </Card>}
                             {viewMode === 'list' && <Card
                                 hoverable
+                                onClick={() => handleNextPage(`/nft/goods/${item.id}`)}
                                 bodyStyle={{
                                     padding: 10,
                                     display: 'flex',
-                                    gap: 12,
+                                    // gap: 12,
                                     alignItems: 'center'
                                 }}
                             >
                                 <img
                                     alt={item.name}
-                                    src={`https://picsum.photos/400/300?${item.id}`}
+                                    src={item.imageUrl}
                                     style={{
                                         width: 80,
                                         height: 60,
@@ -187,30 +240,31 @@ const DigitalCollectionPage = () => {
                                         borderRadius: 4
                                     }}
                                 />
-                                <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ flex: 1, minWidth: 0 }} className='ml-2'>
                                     <Text
                                         ellipsis
                                         style={{
-                                            fontSize: 14,
-                                            marginBottom: 4,
-                                            display: 'block'
+                                            fontSize: viewMode === 'list' ? 14 : 16,
+                                            marginBottom: 4
                                         }}
                                     >
                                         {item.name}
                                     </Text>
-                                    <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        gap: 8
-                                    }}>
-                                        <Text strong style={{ color: '#1890ff', fontSize: 12 }}>
-                                            {item.price}
-                                        </Text>
-                                        <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                                            <Text type="secondary" style={{ fontSize: 12 }}>{item.author}</Text>
-                                            <Text style={{ fontSize: 12 }}>❤️ {item.likes.toLocaleString()}</Text>
+                                    <div className='flex justify-between'>
+                                        <div style={{
+                                            fontSize: 10,
+                                            color: '#666',
+                                            marginTop: 4,
+                                            border: '1px solid #f0f0f0',
+                                            borderRadius: '4px',
+                                            padding: '4px 8px',
+                                            display: 'flex',
+                                            gap: 12
+                                        }}>
+                                            <div >发行: {item.totalSupply || 1000}</div>
+                                            <div >流通: {item.circulatingSupply || 856}</div>
                                         </div>
+                                        <div>¥{item.price}</div>
                                     </div>
                                 </div>
                             </Card>}

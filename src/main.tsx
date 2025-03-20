@@ -5,8 +5,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 // import App from './App.tsx'
-import Root, { loader as rootLoader, action as rootAction, } from "./routes/root";
-import Contact, { loader as contactLoader, action as contactAction, } from "./routes/contact";
 import Home from "./routes/home/index";
 import Login from "./routes/login";
 import Register from "./routes/register";
@@ -18,6 +16,8 @@ import Game3 from "./routes/game/game3";
 
 import Game4 from "./routes/game/game4";
 import DigitalCollectionPage from "./routes/nft/index";
+import DigitalCollectionGoods from "./routes/nft/goods";
+
 import BlogCreate from "./routes/blog/create";
 import BlogPreview from "./routes/blog/preview";
 import BlogUpdate from "./routes/blog/update";
@@ -88,8 +88,11 @@ const router = createHashRouter([
       {
         path: "digitalCollectionPage",
         element: <DigitalCollectionPage />,
-      },]
-
+      }, {
+        path: "goods/:id",
+        element: <DigitalCollectionGoods />,
+      },
+    ]
   },
   {
     path: "/game",
@@ -157,7 +160,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       // Seed Token，影响范围大
       colorPrimary: '#0B49D2',
       borderRadius: 2,
-      fontFamily: 'font-serif'
+      fontFamily: 'font-serif',
       // 派生变量，影响范围小
     },
   }}>
