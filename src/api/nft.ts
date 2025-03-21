@@ -46,3 +46,16 @@ export const getBlogDetail = (id: string) => {
       method: 'get'
     })
   }
+
+  export const getNoticeListSync = (id: string) => {
+    return request({
+      url: `/api/v1/theone-news/sync`,
+      method: 'post'
+    })
+  }  
+  export const getNoticeList = (id: string) => {
+    return request({
+      url: `/api/v1/theone-news`,
+      method: 'get'
+    })
+  }  

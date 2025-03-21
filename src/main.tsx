@@ -17,6 +17,7 @@ import Game3 from "./routes/game/game3";
 import Game4 from "./routes/game/game4";
 import DigitalCollectionPage from "./routes/nft/index";
 import DigitalCollectionGoods from "./routes/nft/goods";
+import NFTNotice from "./routes/nft/notice";
 
 import BlogCreate from "./routes/blog/create";
 import BlogPreview from "./routes/blog/preview";
@@ -91,6 +92,10 @@ const router = createHashRouter([
       }, {
         path: "goods/:id",
         element: <DigitalCollectionGoods />,
+      },
+      {
+        path: "notice",
+        element: <NFTNotice />,
       },
     ]
   },

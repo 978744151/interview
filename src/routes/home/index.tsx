@@ -87,17 +87,20 @@ const Home: React.FC = () => {
     navigate(`/blog/update/${blog._id}`);
   }
   const handleNext = (blog, event) => {
-
     // 处理点击事件...
     navigate(`/blog/${blog._id}`);
   };
   const handleGames = (index: number) => {
-    if (index) {
-      navigate(`/game/game${index}`);
-    } else {
+    if (index === 0) {
       navigate(`/nft/digitalCollectionPage`);
+    } else if (index === 1) {
+      navigate(`/nft/notice`);
     }
-
+    // if (index) {
+    //   navigate(`/game/game${index}`);
+    // } else {
+    //   navigate(`/nft/digitalCollectionPage`);
+    // }
   }
   return (
     <>
@@ -110,7 +113,7 @@ const Home: React.FC = () => {
           <div style={categoryStyle}>
             <Title level={4} style={{ marginBottom: 24 }}>热门分类</Title>
             <Row gutter={[16, 16]}>
-              {['数字藏品', '数字猜谜游戏', '记忆卡牌游戏', '贪吃蛇', '日期计算器',].map((name, index) => (
+              {['数字藏品', '公告管理', '数字猜谜游戏', '记忆卡牌游戏', '贪吃蛇', '日期计算器',].map((name, index) => (
                 <Col span={6} key={name}>
                   <Card
                     hoverable
