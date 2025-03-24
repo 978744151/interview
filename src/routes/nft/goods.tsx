@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Image, Card, Typography, Row, Col, Tag, List, Statistic } from 'antd';
-import { Toast, Button } from 'antd-mobile'
+import React, { useEffect, useState, useRef } from 'react';
+import { Image, Card, Button, Typography, Row, Col, Tag, List, Statistic } from 'antd';
 
 import { ShoppingCartOutlined, LinkOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
@@ -137,6 +136,29 @@ const NFTDetail: React.FC = () => {
     const { navigate, goBack } = useNavigation()
     const { id } = useParams()
     const [nftData, setNftData] = useState({})
+    const [isScrolled, setIsScrolled] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleScroll = (e) => {
+            const scrollTop = window.scrollY ||
+                document.documentElement.scrollTop ||
+                document.body.scrollTop
+            console.log(scrollTop)
+            setIsScrolled(scrollTop > 290);
+        };
+
+        container.addEventListener('scroll', handleScroll, true);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+
+    }, []);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -152,12 +174,13 @@ const NFTDetail: React.FC = () => {
         fetchData()
     }, [])
     return (
-        <div className=" mx-auto nft-goods">
+        <div ref={containerRef} className="mx-auto nft-goods" style={{ height: '100vh', overflow: 'auto' }}>
             {/* Banner区域 */}
             {/* 悬浮返回按钮 */}
             {/* <LeftOutlined onClick={goBack}
                 className='leftReturn' /> */}
             <Button
+                style={{ color: isScrolled ? '#000' : '#fff' }}
                 icon={<LeftOutlined />}
                 onClick={goBack}
                 className='leftReturn'

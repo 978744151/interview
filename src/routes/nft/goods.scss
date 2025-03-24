@@ -12,6 +12,10 @@
 }
 
 .nft-goods {
+  position: relative;
+  height: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
     .ant-list-items{
         padding-bottom: 10px;
     }
