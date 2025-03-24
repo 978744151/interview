@@ -4,14 +4,13 @@ import AnchorComponent from './anchor'
 import Menus from './menus'
 import DeskHeaderComponents from './desk-header'
 import { Row, Col, Card, Typography, Skeleton } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 const { Title } = Typography;
-import { getBlogList, createBlog } from '@/api/log';
+import { getBlogList, createBlog } from '@/api/log.ts';
 import { useEffect, useState } from 'react';
-import { getStore } from '@/utils/store';
-import { useNavigate } from "react-router-dom";
-import PageFooter from '@/layouts/PageFooter'
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import TabBar from '../../components/TabBar';
+import { Grid } from 'antd-mobile';
 
 const blogCardStyle: React.CSSProperties = {
   boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
@@ -25,21 +24,19 @@ const blogCardStyle: React.CSSProperties = {
   background: '#fff',
 
 };
-const contentStyle: React.CSSProperties = {
-
-  // overflow: 'auto'
+const categoryItemStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '16px 8px',
+  background: '#fff',
+  borderRadius: 8,
+  gap: 8,
 };
 
 
-const footerStyle: React.CSSProperties = {
-  textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#fff',
-  position: 'fixed',
-  width: "100%",
-  zIndex: 10,
-  bottom: 0,
-};
+
+
 
 const layoutStyle = {
   // overflow: 'scroll',
@@ -65,10 +62,26 @@ const blogItemStyle: React.CSSProperties = {
 
   cursor: 'pointer',
 };
+// 添加类型定义
+interface Blog {
+  _id: string;
+  id: string;
+  title: string;
+  summary: string;
+  cover?: string;
+  likes: number;
+  createdAt: string;
+  user?: {
+    name: string;
+  };
+}
+
 const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [blogs, setBlogs] = useState<any[]>([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     setLoading(true)
     fetchBlogs()
@@ -81,13 +94,13 @@ const Home: React.FC = () => {
     setLoading(false)
     // 处理数据...
   }
-  const handleUpdate = async (blog, event) => {
-    event.preventDefault();    // 阻止默认行为
-    event.stopPropagation();   // 停止冒泡
+  const handleUpdate = async (blog: Blog, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     navigate(`/blog/update/${blog._id}`);
   }
-  const handleNext = (blog, event) => {
-    // 处理点击事件...
+
+  const handleNext = (blog: Blog, event?: React.MouseEvent) => {
     navigate(`/blog/${blog._id}`);
   };
   const handleGames = (index: number) => {
@@ -106,30 +119,35 @@ const Home: React.FC = () => {
     <>
       <Layout style={layoutStyle}>
         <DeskHeaderComponents />
-        <Content style={contentStyle}>
+        <Content >
           <AnchorComponent blogs={blogs} />
 
           {/* 新增分类模块 */}
           <div style={categoryStyle}>
             <Title level={4} style={{ marginBottom: 24 }}>热门分类</Title>
-            <Row gutter={[16, 16]}>
-              {['数字藏品', '公告管理', '数字猜谜游戏', '记忆卡牌游戏', '贪吃蛇', '日期计算器',].map((name, index) => (
-                <Col span={6} key={name}>
-                  <Card
-                    hoverable
-                    onClick={() => handleGames(index)}
-                  >
-                    <Card.Meta title={name} description="" />
-                  </Card>
-                </Col>
+            <Grid columns={3} gap={8}>
+              {[
+                { name: '数字藏品', icon: '🎨' },
+                { name: '公告管理', icon: '📢' },
+                { name: '数字猜谜', icon: '🎮' },
+                { name: '记忆卡牌', icon: '🃏' },
+                { name: '贪吃蛇', icon: '🐍' },
+                { name: '计算器', icon: '🧮' },
+              ].map((item, index) => (
+                <Grid.Item key={item.name} onClick={() => handleGames(index)}>
+                  <div style={categoryItemStyle}>
+                    <span style={{ fontSize: 24 }}>{item.icon}</span>
+                    <span style={{ fontSize: 14, color: '#333' }}>{item.name}</span>
+                  </div>
+                </Grid.Item>
               ))}
-            </Row>
+            </Grid>
           </div>
           {/* 新增博客列表 */}
           <div style={blogListStyle}>
             <Title level={4} style={{ marginBottom: 16, fontSize: 18 }}>最新文章</Title>
             <Skeleton loading={loading} active>
-              {blogs.map(blog => (
+              {blogs.map((blog: Blog) => (
                 <div
                   key={blog.id}
                   className="hover:bg-gray-50 "
@@ -199,7 +217,7 @@ const Home: React.FC = () => {
           </div>
         </Content >
       </Layout >
-      <PageFooter />
+      <TabBar />
     </>
   )
 };

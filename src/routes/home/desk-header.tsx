@@ -3,7 +3,7 @@ import { DownOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Space, Divider, theme, Layout, Button, Typography } from 'antd';
 import { useNavigate } from "react-router-dom";
-import { getStore } from '@/utils/store';
+import { getStore } from '@/utils/store.ts';
 const { Text } = Typography;
 
 const { useToken } = theme;

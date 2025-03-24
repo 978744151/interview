@@ -1,3 +1,4 @@
+
 import ReactDOM from 'react-dom/client'
 import { ConfigProvider } from 'antd';
 import {
@@ -22,136 +23,109 @@ import NFTNotice from "./routes/nft/notice";
 import BlogCreate from "./routes/blog/create";
 import BlogPreview from "./routes/blog/preview";
 import BlogUpdate from "./routes/blog/update";
+import { AliveScope, KeepAlive } from 'react-activation'
 
 import ErrorPage from "./error-page";
 import Index from "./routes/index";
 import MainLayout from '@/layouts/MainLayout'
+import zhCN from 'antd/locale/zh_CN';
+import RootLayout from '@/layouts/RootLayout'
 
-import EditContact, {
-  action as editAction,
-} from "./routes/edit";
+
 import './index.css'
-import { action as destroyAction } from "./routes/destroy";
 const router = createHashRouter([
-  // {
-  //   path: "/home",
-  //   element: <Root />,
-  //   errorElement: <ErrorPage />,
-  //   loader: rootLoader,
-  //   action: rootAction,
-  //   children: [
-  //     {
-  //       errorElement: <ErrorPage />,
-  //       children: [
-  //         { index: true, element: <Index /> },
-  //         {
-  //           path: "contacts/:contactId",
-  //           element: <Contact />,
-  //           loader: contactLoader,
-  //           action: contactAction
-  //         },
-  //         {
-  //           path: "contacts/:contactId/edit",
-  //           element: <EditContact />,
-  //           loader: contactLoader,
-  //           action: editAction,
-  //         },
-  //         {
-  //           path: "contacts/:contactId/destroy",
-  //           action: destroyAction,
-  //           errorElement: <div>Oops! There was an error.</div>,
-  //         }
-  //         /* the rest of the routes */
-  //       ],
-  //     }
-  //   ],
-  // },
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/base",
-    element: <Base />,
-  },
-  {
-    path: "/nft",
-    element: <MainLayout />,
+    element: <RootLayout />,
     children: [
       {
-        path: "digitalCollectionPage",
-        element: <DigitalCollectionPage />,
-      }, {
-        path: "goods/:id",
-        element: <DigitalCollectionGoods />,
+        path: "/",
+        element: <Home />,
       },
       {
-        path: "notice",
-        element: <NFTNotice />,
-      },
-    ]
-  },
-  {
-    path: "/game",
-    element: <MainLayout />,
-    children: [
-      {
-        path: "game0",
-        element: <Game0 />,
+        path: "/login",
+        element: <Login />,
       },
       {
-        path: "game1",
-        element: <Game1 />,
+        path: "/register",
+        element: <Register />,
       },
       {
-        path: "game2",
-        element: <Game2 />,
+        path: "/base",
+        element: <Base />,
       },
       {
-        path: "Game3",
-        element: <Game3 />,
+        path: "/nft",
+        // element: <MainLayout />,
+        children: [
+          {
+            path: "digitalCollectionPage",
+            element: <KeepAlive><DigitalCollectionPage /></KeepAlive>,
+          }, {
+            path: "goods/:id",
+            element: <DigitalCollectionGoods />,
+          },
+          {
+            path: "notice",
+            element: <NFTNotice />,
+          },
+        ]
       },
       {
-        path: "game4",
-        element: <Game4 />,
+        path: "/game",
+        element: <MainLayout />,
+        children: [
+          {
+            path: "game0",
+            element: <Game0 />,
+          },
+          {
+            path: "game1",
+            element: <Game1 />,
+          },
+          {
+            path: "game2",
+            element: <Game2 />,
+          },
+          {
+            path: "Game3",
+            element: <Game3 />,
+          },
+          {
+            path: "game4",
+            element: <Game4 />,
+          },
+        ]
       },
-    ]
-  },
 
-  {
-    path: 'blog',
-    element: <MainLayout />,
-    children: [
       {
-        path: "create",
-        element: <BlogCreate />,
+        path: 'blog',
+        element: <MainLayout />,
+        children: [
+          {
+            path: "create",
+            element: <BlogCreate />,
+          },
+          {
+            path: ":id",
+            element: <BlogPreview />,
+          },
+          {
+            path: "update/:id",
+            element: <BlogUpdate />,
+          }
+        ]
       },
       {
-        path: ":id",
-        element: <BlogPreview />,
-      },
-      {
-        path: "update/:id",
-        element: <BlogUpdate />,
+        path: "*",
+        element: <Home />,
       }
+      // {
+      //   path: "contacts/:contactId",
+      //   element: <Contact />,
+      // }
     ]
-  },
-  {
-    path: "*",
-    element: <Home />,
   }
-  // {
-  //   path: "contacts/:contactId",
-  //   element: <Contact />,
-  // }
 ]);
 
 // ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -160,7 +134,7 @@ const router = createHashRouter([
 //   </React.StrictMode>,
 // )
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ConfigProvider theme={{
+  <ConfigProvider locale={zhCN} theme={{
     token: {
       // Seed Token，影响范围大
       colorPrimary: '#0B49D2',
@@ -169,6 +143,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       // 派生变量，影响范围小
     },
   }}>
-    <RouterProvider router={router} />
+    <AliveScope>
+      <RouterProvider router={router} />
+    </AliveScope>
   </ConfigProvider>
 );

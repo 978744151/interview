@@ -40,7 +40,7 @@ function BlogCreate() {
                 }
             } catch (error) {
                 console.error('获取博客详情失败:', error)
-                navigate('/')
+
             } finally {
                 setLoading(false)
             }

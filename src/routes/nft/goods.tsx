@@ -1,10 +1,16 @@
-import React from 'react';
-import { Image, Typography, Row, Col, Card, Tag, List, Statistic, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Image, Card, Typography, Row, Col, Tag, List, Statistic } from 'antd';
+import { Toast, Button } from 'antd-mobile'
+
 import { ShoppingCartOutlined, LinkOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 const { TabPane } = Tabs;
 const { Title, Text } = Typography;
 import './goods.scss'
+import { useNavigation, useParams } from '@/hooks/useNavigation'
+import { LeftOutlined } from '@ant-design/icons';  // 添加这个引入
+import { getNfts } from '@/api/nft.ts'
+
 // 模拟数据
 const nftDetail = {
     id: 1,
@@ -15,6 +21,86 @@ const nftDetail = {
     description: '幻殇数字艺术系列是一个独特的NFT集合，融合了东方美学与数字艺术...',
     consignments: [
         {
+            id: 1,
+            name: '幻殇·月光',
+            serialNumber: '#0001',
+            hash: '0x7d8f...3e2a',
+            price: '2.5 ETH'
+        },
+        {
+            id: 2,
+            name: '幻殇·星辰',
+            serialNumber: '#0002',
+            hash: '0x9c4e...8f1b',
+            price: '3.1 ETH'
+        },
+        {
+            id: 1,
+            name: '幻殇·月光',
+            serialNumber: '#0001',
+            hash: '0x7d8f...3e2a',
+            price: '2.5 ETH'
+        },
+        {
+            id: 2,
+            name: '幻殇·星辰',
+            serialNumber: '#0002',
+            hash: '0x9c4e...8f1b',
+            price: '3.1 ETH'
+        }, {
+            id: 1,
+            name: '幻殇·月光',
+            serialNumber: '#0001',
+            hash: '0x7d8f...3e2a',
+            price: '2.5 ETH'
+        },
+        {
+            id: 2,
+            name: '幻殇·星辰',
+            serialNumber: '#0002',
+            hash: '0x9c4e...8f1b',
+            price: '3.1 ETH'
+        },
+        {
+            id: 1,
+            name: '幻殇·月光',
+            serialNumber: '#0001',
+            hash: '0x7d8f...3e2a',
+            price: '2.5 ETH'
+        },
+        {
+            id: 2,
+            name: '幻殇·星辰',
+            serialNumber: '#0002',
+            hash: '0x9c4e...8f1b',
+            price: '3.1 ETH'
+        }, {
+            id: 1,
+            name: '幻殇·月光',
+            serialNumber: '#0001',
+            hash: '0x7d8f...3e2a',
+            price: '2.5 ETH'
+        },
+        {
+            id: 2,
+            name: '幻殇·星辰',
+            serialNumber: '#0002',
+            hash: '0x9c4e...8f1b',
+            price: '3.1 ETH'
+        }, {
+            id: 1,
+            name: '幻殇·月光',
+            serialNumber: '#0001',
+            hash: '0x7d8f...3e2a',
+            price: '2.5 ETH'
+        },
+        {
+            id: 2,
+            name: '幻殇·星辰',
+            serialNumber: '#0002',
+            hash: '0x9c4e...8f1b',
+            price: '3.1 ETH'
+        }, {
             id: 1,
             name: '幻殇·月光',
             serialNumber: '#0001',
@@ -48,20 +134,52 @@ const mockData = {
     ]
 };
 const NFTDetail: React.FC = () => {
+    const { navigate, goBack } = useNavigation()
+    const { id } = useParams()
+    const [nftData, setNftData] = useState({})
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data } = await getNfts({ id }, id)
+                console.log(data.data)
+                setNftData(data.data)
+            } catch (error) {
+                console.error('获取博客详情失败:', error)
+            } finally {
+
+            }
+        }
+        fetchData()
+    }, [])
     return (
-        <div className="max-w-[1200px] mx-auto px-4 py-6 nft-goods">
+        <div className=" mx-auto nft-goods">
             {/* Banner区域 */}
-            <div className="mb-4">
-                <Image
-                    src={nftDetail.banner}
-                    alt={nftDetail.title}
-                    preview={false}
-                    className="w-full rounded-lg shadow-lg "
-                    style={{
-                        height: 200,
-                        objectFit: 'cover'
-                    }}
-                />
+            {/* 悬浮返回按钮 */}
+            {/* <LeftOutlined onClick={goBack}
+                className='leftReturn' /> */}
+            <Button
+                icon={<LeftOutlined />}
+                onClick={goBack}
+                className='leftReturn'
+            />
+            <div className='goodInfoBox'>
+                <div className='goodImg' style={{ backgroundImage: 'url(' + nftData?.imageUrl + ')' }}></div>
+                <div className='coverBg'></div>
+                <div className=' w-full flex justify-center h-full'>
+                    <Image
+                        src={nftData?.imageUrl}
+                        alt={nftData?.name}
+                        preview={true}
+                        className="rounded-lg shadow-lg center"
+                        style={{
+                            height: 280,
+                            objectFit: 'contain',
+                            marginTop: 60,
+                            borderRadius: 12,
+                        }}
+                    />
+                </div>
+
             </div>
 
             {/* 基本信息区域 */}
@@ -69,21 +187,21 @@ const NFTDetail: React.FC = () => {
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-3">
                         <Title level={4} style={{ margin: 0 }}>
-                            {nftDetail.title}
+                            {nftData.name}
                         </Title>
                         <Tag color="gold">限量版</Tag>
                     </div>
                     <div className="flex items-center gap-6">
                         <Statistic
                             title="限量发行"
-                            value={nftDetail.totalSupply}
+                            value={nftData.quantity}
                             suffix="份"
                             valueStyle={{ color: '#1890ff', fontSize: 14 }}
                         />
                         <div className="h-6 w-[1px] bg-gray-200" />
                         <Statistic
                             title="当前流通"
-                            value={nftDetail.circulatingSupply}
+                            value={nftDetail.soldQty || 0}
                             suffix="份"
                             valueStyle={{ color: '#52c41a', fontSize: 14 }}
                         />
@@ -195,7 +313,7 @@ const NFTDetail: React.FC = () => {
                 </Tabs>
             </Card>
 
-        </div>
+        </div >
     );
 };
 

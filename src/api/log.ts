@@ -18,7 +18,7 @@ export const getBlogList = (params: { page: number; pageSize: number }) => {
       data
     })
   }
-  export const updateBlog= ( id:any,data) => {
+  export const updateBlog= ( id:any,data:any) => {
     return request({
       url: `/api/v1/blogs/${id}`,
       method: 'put',

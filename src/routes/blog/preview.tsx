@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { AiEditor } from "aieditor";
 import "aieditor/dist/style.css"
-import MainLayout from '@/layouts/MainLayout'
-import { useNavigation } from '@/hooks/useNavigation'
-import { getBlogDetail } from '@/api/log'
+import { useNavigation } from '@/hooks/useNavigation.ts'
+import { getBlogDetail } from '@/api/log.ts'
 import { Skeleton, Typography, Button } from 'antd'
 import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom';
 import './preview.scss'
+import { Breadcrumb } from 'antd';
+import { HomeOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography
 
@@ -35,7 +36,6 @@ function BlogPreview() {
             content: blogData.content,
             contentIsMarkdown: true,
             editable: false, // 禁用编辑
-            toolbar: true,  // 隐藏工具栏
             plugins: [],      // 禁用所有插件
             codeBlock: {
                 languages: [
@@ -65,7 +65,6 @@ function BlogPreview() {
                 }
             } catch (error) {
                 console.error('获取博客详情失败:', error)
-                navigate('/')
             } finally {
                 setLoading(false)
             }
@@ -77,8 +76,10 @@ function BlogPreview() {
     return (
         <>
             <div style={containerStyle} className='preview'>
-                <Button onClick={goBack} style={{ marginBottom: 24 }}>返回</Button>
-
+                <Breadcrumb style={{ marginBottom: 24 }}>
+                    <Breadcrumb.Item><HomeOutlined onClick={goBack} /></Breadcrumb.Item>
+                    <Breadcrumb.Item> {blogData?.title}</Breadcrumb.Item>
+                </Breadcrumb>
                 <Skeleton loading={loading} active>
                     {blogData && (
                         <>

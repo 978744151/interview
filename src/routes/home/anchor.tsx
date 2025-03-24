@@ -26,27 +26,33 @@ const gradientOverlay: React.CSSProperties = {
   justifyContent: 'center',
   transition: 'transform 0.3s ease',
 };
-type AnchorProps = {
-  blogs: Array<{ cover?: string }>;
-};
+// 定义博客项的接口
+interface Blog {
+  _id: string;
+  title: string;
+  cover?: string;
+}
 
-const AnchorComponent: React.FC = ({ blogs }) => {
+// 修改组件的类型定义
+interface AnchorProps {
+  blogs: Blog[];
+}
 
+const AnchorComponent: React.FC<AnchorProps> = ({ blogs }) => {
   const [dotPosition] = useState<DotPosition>('right');
   const navigate = useNavigate();
 
-  const handleNext = (blog) => {
-    console.log(123)
-    // 处理点击事件...
+  const handleNext = (blog: Blog) => {
     navigate(`/blog/${blog._id}`);
   };
+
   return (
     <>
       <Carousel
         dotPosition={dotPosition}
         autoplay
         effect="fade"
-        style={{ borderRadius: 8, overflow: 'hidden' }}
+        style={{ borderRadius: 0, overflow: 'hidden' }}
       >
         {blogs.map((blog, index) => (
           <div key={index}>
@@ -57,11 +63,12 @@ const AnchorComponent: React.FC = ({ blogs }) => {
               <div style={gradientOverlay} onClick={() => handleNext(blog)}>
                 <h3 style={{
                   color: '#fff',
-                  fontSize: '2.5rem',
+                  fontSize: '1rem',
                   textShadow: '2px 2px 8px rgba(0,0,0,0.5)',
                   transform: 'translateY(20px)',
                   transition: 'all 0.5s ease',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  padding: 12
                 }} className="hover:translate-y-0 hover:opacity-100 ">
                   {blog.title}
                 </h3>

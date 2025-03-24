@@ -11,7 +11,7 @@ const MainLayout = () => {
             <div style={outLetStyle}>
                 <Outlet /> {/* 移除className，用div包裹控制高度 */}
             </div>
-            <PageFooter />
+            {/* <PageFooter /> */}
         </>
     )
 }

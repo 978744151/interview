@@ -4,40 +4,61 @@ import { useNavigation } from '@/hooks/useNavigation.ts';
 import { getNftList, getNftsList } from '@/api/nft.ts'
 import { div } from 'framer-motion/client';
 import { AppstoreOutlined, BarsOutlined, HeartFilled } from '@ant-design/icons';
+import DeskHeaderComponents from '@/routes/home/desk-header.tsx'
 
+// 添加搜索历史类型
+interface SearchHistory {
+    keyword: string;
+    timestamp: number;
+}
 const { Meta } = Card;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
 
-const collections = [
-    { id: 1, category: 1, name: '加密朋克#123', price: '1.2 ETH', author: 'CryptoArtist', likes: 2345 },
-    { id: 2, category: 1, name: '数字蒙娜丽莎', price: '4.8 ETH', author: 'DaVinci 2.0', likes: 1892 },
-    { id: 3, category: 2, name: '传奇武器皮肤', price: '0.8 ETH', author: 'GameStudio', likes: 3456 },
-    { id: 4, category: 3, name: '限量版单曲', price: '2.5 ETH', author: 'DJ Block', likes: 1567 },
-    { id: 5, category: 4, name: '元宇宙别墅', price: '15 ETH', author: 'MetaEstate', likes: 892 },
-];
 
-const DigitalCollectionPage = () => {
+
+// 添加类型定义
+interface Category {
+    _id: string;
+    name: string;
+    cover: string;
+}
+
+interface NFTItem {
+    _id: string;
+    name: string;
+    imageUrl: string;
+    price: number;
+    quantity: number;
+    circulatingSupply: number;
+    likes: number;
+    category: {
+        _id: string;
+    };
+}
+
+const DigitalCollectionPage: React.FC = () => {
     const { goBack, navigate } = useNavigation();
-    const [viewMode, setViewMode] = useState<any>('grid'); // 新增视图状态
-    const [categories, setCategories] = useState<any>([])
-    const [collections, setCollections] = useState<any>([])
-    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+    const [viewMode, setViewMode] = useState<any>('grid');
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [collections, setCollections] = useState<NFTItem[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [searchKeyword, setSearchKeyword] = useState('');
-    const [sortBy, setSortBy] = useState('popular');
+    const [sortBy, setSortBy] = useState<'popular' | 'price'>('popular');
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const { data } = await getNftList({})
                 if (data.success) {
                     setCategories(data.data)
+                    setSelectedCategory(data.data[0]._id)  // 设置初始选中分类
                     getNfts(data.data[0]._id)
                 }
             } catch (error) {
                 console.error('获取博客详情失败:', error)
-                navigate('/')
             } finally {
 
             }
@@ -54,27 +75,27 @@ const DigitalCollectionPage = () => {
         navigate(path)
     };
     const handleSetSelectedCategory = (categoryId: string) => {
-        console.log(categoryId)
+        setSelectedCategory(categoryId)  // 设置选中的分类
         getNfts(categoryId)
     };
     const filteredCollections = collections
-        .filter((item: any) => {
+        .filter((item: NFTItem) => {
             const matchCategory = !selectedCategory || item.category._id === selectedCategory;
             const matchSearch = item.name.toLowerCase().includes(searchKeyword.toLowerCase());
             return matchCategory && matchSearch;
-        })
-    // .sort((a, b) => sortBy === 'popular' ? b.likes - a.likes : a.price.localeCompare(b.price));
+        });
 
     return (
         <>
-            <div style={{ maxWidth: 1200, margin: '20px auto', padding: '0 12px', overflow: 'hidden' }}>
+            {/* <DeskHeaderComponents />  */}
+            <div style={{ maxWidth: 1200, margin: '12px auto', padding: '0 12px', overflow: 'hidden' }}>
                 {/* <Button onClick={goBack} style={{ marginBottom: 24 }}>返回</Button> */}
 
                 {/* 分类导航 */}
                 <div style={{ marginBottom: 12 }}>
                     {/* <Title level={2} style={{ marginBottom: 24 }}>数字藏品分类</Title> */}
-                    <div style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '8px 0' }}>
-                        {categories.map((category: any) => (
+                    <div style={{ display: 'flex', gap: 16, overflowX: 'auto' }}>
+                        {categories.map((category: Category) => (
                             <Card
                                 key={category._id}
                                 hoverable
@@ -84,7 +105,7 @@ const DigitalCollectionPage = () => {
                                     borderRadius: 8
                                 }}
                                 onClick={() => handleSetSelectedCategory(category._id)}
-                                cover={<img alt={category.name} src={category.cover} style={{ height: 100, objectFit: 'cover' }} />}
+                                cover={<img alt={category.name} src={category.cover} style={{ height: 100, objectFit: 'cover', objectPosition: 'top' }} />}
                             >
                                 <Meta
                                     title={category.name}
@@ -137,7 +158,7 @@ const DigitalCollectionPage = () => {
                         >
                             {viewMode === 'grid' && <Card
                                 hoverable
-                                onClick={() => handleNextPage(`/nft/goods/${item.id}`)}
+                                onClick={() => handleNextPage(`/nft/goods/${item._id}`)}
                                 bodyStyle={{
                                     padding: 16,
                                     // 新增间距控制
@@ -222,7 +243,7 @@ const DigitalCollectionPage = () => {
                             </Card>}
                             {viewMode === 'list' && <Card
                                 hoverable
-                                onClick={() => handleNextPage(`/nft/goods/${item.id}`)}
+                                onClick={() => handleNextPage(`/nft/goods/${item._id}`)}
                                 bodyStyle={{
                                     padding: 10,
                                     display: 'flex',

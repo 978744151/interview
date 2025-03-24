@@ -18,6 +18,13 @@ export const getNftList = (params: { page: number; perPage: number }) => {
       params
     })
   }
+  export const getNfts = (params: {  },id:string) => {
+    return request({
+      url: `/api/v1/nfts/${id}`,
+      method: 'get',
+      params
+    })
+  }
   export const createNFt= ( data:any) => {
     return request({
       url: '/api/v1/nft-categories',
