@@ -1,0 +1,178 @@
+.forum-list-container {
+  .tab-header {
+    position: relative;
+    overflow: hidden;
+    
+    .forum-tabs {
+      .ant-tabs-nav {
+        // 允许水平滚动
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        
+        // 隐藏滚动条但保持功能
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        scrollbar-width: none;
+        
+        .ant-tabs-nav-list {
+          transition: transform 0.3s ease-out;
+        }
+      }
+      
+      // 增加滑动效果
+      .ant-tabs-ink-bar {
+        transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      }
+    }
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    
+    .forum-tabs {
+      flex: 1;
+      
+      .ant-tabs-nav {
+        margin: 0;
+        &::before {
+          border-bottom: none;
+        }
+      }
+    }
+    
+    .header-search-icon {
+      font-size: 18px;
+      padding: 8px;
+      cursor: pointer;
+      color: #666;
+      
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 12px;
+    padding-bottom: 100px;
+    
+    .forum-tabs {
+    //   margin-bottom: 16px;
+      
+      .ant-tabs-nav {
+        margin-bottom: 16px;
+        
+        &::before {
+          border-bottom: none;
+        }
+      }
+      
+      .ant-tabs-tab {
+        padding: 8px 0;
+        margin: 0 32px 0 0;
+        font-size: 16px;
+        
+        &.ant-tabs-tab-active .ant-tabs-tab-btn {
+          font-weight: 500;
+        }
+      }
+    }
+    
+    .search-box {
+      margin-bottom: 16px;
+    }
+    
+    .forum-list {
+      .forum-item {
+        // padding: 16px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        
+        &:hover {
+          background-color: #fafafa;
+        }
+        
+        .post-header {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 12px;
+          
+          .post-info {
+            flex: 1;
+            
+            .post-title {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin-bottom: 8px;
+              
+              .hot-icon {
+                color: #ff4d4f;
+                font-size: 16px;
+              }
+            }
+            
+            .post-meta {
+              display: flex;
+              align-items: center;
+              gap: 16px;
+              font-size: 12px;
+              
+              .post-stats {
+                margin-left: auto;
+                color: #999;
+                
+                span {
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 4px;
+                }
+              }
+            }
+          }
+        }
+        
+        .hot-comment {
+          margin-top: 12px;
+          padding: 12px;
+          background: #f9f9f9;
+          border-radius: 4px;
+          
+          .comment-content {
+            display: block;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+          }
+          
+          .comment-author {
+            display: block;
+            font-size: 12px;
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+  
+  // 暗色模式
+  @media (prefers-color-scheme: dark) {
+    .forum-list-container {
+      .forum-list .forum-item {
+        border-bottom-color: #303030;
+        
+        &:hover {
+          background-color: #1f1f1f;
+        }
+        
+        .hot-comment {
+          background: #1f1f1f;
+        }
+      }
+    }
+  }

@@ -4,7 +4,7 @@ import { loginUser, getUserInfo } from '@/api/login'
 import { setStore } from '@/utils/store'
 import { useNavigate } from "react-router-dom";
 import website from '@/plugins/website'
-
+import './login.scss'
 type FieldType = {
   email?: string;
   password?: string;
@@ -12,13 +12,10 @@ type FieldType = {
 };
 
 const containerStyle = {
-  backgroundColor: theme.defaultSeed.colorPrimary,
+  // backgroundColor: theme.defaultSeed.colorPrimary,
   width: '100%',
   height: '100vh',
   overflow: 'hidden',
-}
-const formStyle = {
-
 }
 
 
@@ -57,88 +54,71 @@ const Login: React.FC = () => {
   return (
     <>
       {contextHolder}
+      <div className="login-container">
+        <div className="login-background">
+          <div className="login-shape"></div>
+          <div className="login-shape"></div>
+        </div>
 
-      <Row justify="center" align="middle" style={containerStyle} className='p-[12px]'>
-        <Col xs={24} md={12} lg={10} xl={8} className="m-4 p-4 md:p-8 bg-white rounded-lg shadow-xl">
-          <Col xs={24} md={24} className="text-center mb-8 md:mb-8 md:pr-8">
-            <h1 className="text-5xl md:text-6xl font-bold text-white animate-float">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-                幻
-              </span>
-              <span className="bg-gradient-to-r from-blue-400 via-green-400 to-yellow-300 bg-clip-text text-transparent">
-                殇
-              </span>
-            </h1>
-            <p className="mt-4 text-xl text-gray-200 font-mono tracking-wider">
-              Digital Collection Universe
-            </p>
-          </Col>
-          <Form
-            className="w-full"
-            labelCol={{ xs: 24, md: 8 }}
-            wrapperCol={{ xs: 24, md: 16 }}
-            name="basic"
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
-            <Form.Item<FieldType>
-              label="邮箱"
-              name="email"
-              labelAlign="left"
-              rules={[{ required: true, message: 'Please input your email!' }]}
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item<FieldType>
-              label="密码"
-              name="password"
-              labelAlign="left"
-
-              rules={[{ required: true, message: 'Please input your password!' }]}
-            >
-              <Input.Password />
-            </Form.Item>
-
-            <Form.Item<FieldType>
-              name="remember"
-              valuePropName="checked"
-              wrapperCol={{ offset: 8, span: 16 }}
-            >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ xs: 24, md: { offset: 8, span: 16 } }}>
-              <div className="flex flex-col md:flex-row gap-2 justify-between">
-                <Button
-                  onClick={handleRegister}
-                  size="large"
-                  className="md:order-1"
-                >
-                  注册
-                </Button>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  size="large"
-                  className="w-full md:w-auto"
-                >
-                  登录
-                </Button>
+        <Row justify="center" align="middle" className="login-content">
+          <Col xs={24} sm={20} md={12} lg={10} xl={8}>
+            <div className="login-card">
+              <div className="login-header">
+                <h1 className="login-title">
+                  <span className="gradient-text-1">Once</span>
+                  <span className="gradient-text-2"></span>
+                </h1>
+                <p className="login-subtitle">Digital Collection Universe</p>
               </div>
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row>
-      {/* <div className='flex-1 flex justify-center items-center'>
-        <span className='text-6xl font-serif text-white'>{website.title}</span>
-      </div> */}
+
+              <Form
+                className="login-form"
+                layout="vertical"
+                name="basic"
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item<FieldType>
+                  label="手机号"
+                  name="email"
+                  rules={[{ required: true, message: '请输入手机号!' }]}
+                >
+                  <Input size="large" placeholder="请输入手机号" />
+                </Form.Item>
+
+                <Form.Item<FieldType>
+                  label="密码"
+                  name="password"
+                  rules={[{ required: true, message: '请输入密码!' }]}
+                >
+                  <Input.Password size="large" placeholder="请输入密码" />
+                </Form.Item>
+
+                <Form.Item<FieldType>
+                  name="remember"
+                  valuePropName="checked"
+                >
+                  {/* <Checkbox>子</Checkbox> */}
+                  未注册用户自动注册登录
+                </Form.Item>
+
+                <Form.Item className="login-buttons">
+                  <Button type="primary" htmlType="submit" size="large" block>
+                    登录
+                  </Button>
+                  {/* <Button size="large" block onClick={handleRegister}>
+                    注册账号
+                  </Button> */}
+                </Form.Item>
+              </Form>
+            </div>
+          </Col>
+        </Row>
+      </div>
     </>
-  )
+  );
 };
 
 export default Login;

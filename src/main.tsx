@@ -22,14 +22,16 @@ import NFTNotice from "./routes/nft/notice";
 
 import BlogCreate from "./routes/blog/create";
 import BlogPreview from "./routes/blog/preview";
+import BlogList from "./routes/blog/index.tsx";
+
 import BlogUpdate from "./routes/blog/update";
 import { AliveScope, KeepAlive } from 'react-activation'
 
 import ErrorPage from "./error-page";
 import Index from "./routes/index";
-import MainLayout from '@/layouts/MainLayout'
+import MainLayout from '@/layouts/MainLayout.tsx'
 import zhCN from 'antd/locale/zh_CN';
-import RootLayout from '@/layouts/RootLayout'
+import RootLayout from '@/layouts/RootLayout.tsx'
 
 
 import './index.css'
@@ -42,14 +44,7 @@ const router = createHashRouter([
         path: "/",
         element: <Home />,
       },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
+
       {
         path: "/base",
         element: <Base />,
@@ -113,8 +108,13 @@ const router = createHashRouter([
           {
             path: "update/:id",
             element: <BlogUpdate />,
-          }
+          },
+
         ]
+      },
+      {
+        path: "/blog/list",
+        element: <BlogList />,
       },
       {
         path: "*",
@@ -125,7 +125,15 @@ const router = createHashRouter([
       //   element: <Contact />,
       // }
     ]
-  }
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
 ]);
 
 // ReactDOM.createRoot(document.getElementById('root')!).render(

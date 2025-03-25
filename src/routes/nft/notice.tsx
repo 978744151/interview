@@ -48,7 +48,7 @@ const NoticePage: React.FC = () => {
     ]);
 
     return (
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px' }} className="main-content">
             <Card>
                 <div style={{ marginBottom: 24 }}>
                     <Title level={4}>

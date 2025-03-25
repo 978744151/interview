@@ -15,7 +15,7 @@ const { Title, Text } = Typography
 function BlogPreview() {
     const containerStyle: React.CSSProperties = {
         marginTop: 20,
-        padding: '0 50px',
+        padding: '0 12px',
         maxWidth: 1200,
         marginLeft: 'auto',
         marginRight: 'auto'

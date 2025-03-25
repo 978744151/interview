@@ -1,0 +1,19 @@
+// 直接复用登录页面的样式
+@import './login.scss';
+
+// 注册页面特有的样式
+.login-card {
+  .login-subtitle {
+    font-size: 18px;
+    margin-top: 8px;
+    background: linear-gradient(45deg, #666, #999);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .login-form {
+    .ant-form-item {
+      margin-bottom: 20px;
+    }
+  }
+}

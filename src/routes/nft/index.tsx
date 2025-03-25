@@ -5,7 +5,7 @@ import { getNftList, getNftsList } from '@/api/nft.ts'
 import { div } from 'framer-motion/client';
 import { AppstoreOutlined, BarsOutlined, HeartFilled } from '@ant-design/icons';
 import DeskHeaderComponents from '@/routes/home/desk-header.tsx'
-
+import './index.scss'
 // 添加搜索历史类型
 interface SearchHistory {
     keyword: string;
@@ -88,33 +88,23 @@ const DigitalCollectionPage: React.FC = () => {
     return (
         <>
             {/* <DeskHeaderComponents />  */}
-            <div style={{ maxWidth: 1200, margin: '12px auto', padding: '0 12px', overflow: 'hidden' }}>
+            <div style={{ maxWidth: 1200, margin: '12px auto', padding: '0 12px', overflow: 'hidden' }} className="main-content">
                 {/* <Button onClick={goBack} style={{ marginBottom: 24 }}>返回</Button> */}
 
                 {/* 分类导航 */}
-                <div style={{ marginBottom: 12 }}>
-                    {/* <Title level={2} style={{ marginBottom: 24 }}>数字藏品分类</Title> */}
-                    <div style={{ display: 'flex', gap: 16, overflowX: 'auto' }}>
-                        {categories.map((category: Category) => (
-                            <Card
-                                key={category._id}
-                                hoverable
-                                style={{
-                                    width: 200,
-                                    border: selectedCategory === category._id ? '2px solid #1890ff' : 'none',
-                                    borderRadius: 8
-                                }}
-                                onClick={() => handleSetSelectedCategory(category._id)}
-                                cover={<img alt={category.name} src={category.cover} style={{ height: 100, objectFit: 'cover', objectPosition: 'top' }} />}
-                            >
-                                <Meta
-                                    title={category.name}
-                                // description={<Tag color="#108ee9">{collections.filter(c => c.category === category._id).length} 件藏品</Tag>}
-                                />
-                            </Card>
-                        ))}
-                    </div>
+                <div className="category-nav">
+                    {categories.map((category: Category) => (
+                        <div
+                            key={category._id}
+                            className={`category-item ${selectedCategory === category._id ? 'active' : ''}`}
+                            onClick={() => handleSetSelectedCategory(category._id)}
+                        >
+                            <img src={category.cover} alt={category.name} />
+                            <span>{category.name}</span>
+                        </div>
+                    ))}
                 </div>
+
 
                 <div style={{ display: 'flex', gap: 16, marginBottom: 24, alignItems: 'center' }}>
                     <Search
@@ -155,6 +145,8 @@ const DigitalCollectionPage: React.FC = () => {
                             sm={viewMode === 'grid' ? 12 : 24}
                             md={viewMode === 'grid' ? 8 : 24}
                             lg={viewMode === 'grid' ? 6 : 24}
+                            style={{ borderRadius: 12, overflow: 'hidden' }}
+
                         >
                             {viewMode === 'grid' && <Card
                                 hoverable

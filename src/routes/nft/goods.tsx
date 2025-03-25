@@ -174,7 +174,7 @@ const NFTDetail: React.FC = () => {
         fetchData()
     }, [])
     return (
-        <div ref={containerRef} className="mx-auto nft-goods" style={{ height: '100vh', overflow: 'auto' }}>
+        <div ref={containerRef} className="mx-auto nft-goods main-content" style={{ height: '100vh', overflow: 'auto' }}>
             {/* Banner区域 */}
             {/* 悬浮返回按钮 */}
             {/* <LeftOutlined onClick={goBack}
@@ -231,7 +231,7 @@ const NFTDetail: React.FC = () => {
                     </div>
                 </div>
             </Card>
-            <Card className="mb-8">
+            <Card className="">
                 <Tabs defaultActiveKey="1" size="middle" className="nft-detail-tabs">
                     <TabPane tab="寄售列表" key="1">
                         <List

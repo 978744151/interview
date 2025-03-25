@@ -10,22 +10,29 @@ const TabBar: React.FC = () => {
     const tabs = [
         { key: '/', icon: <HomeOutlined />, label: '首页' },
         { key: '/nft/digitalCollectionPage', icon: <AppstoreOutlined />, label: '藏品' },
-        { key: '/notice', icon: <BellOutlined />, label: '消息' },
-        { key: '/user', icon: <UserOutlined />, label: '我的' },
+        { key: '/blog/list', icon: <BellOutlined />, label: '社区' },
+        { key: '/base', icon: <UserOutlined />, label: '我的' },
     ];
 
     return (
         <div className="tab-bar">
-            {tabs.map(tab => (
-                <div
-                    key={tab.key}
-                    className={`tab-item ${location.pathname === tab.key ? 'active' : ''}`}
-                    onClick={() => navigate(tab.key)}
-                >
-                    {tab.icon}
-                    <span>{tab.label}</span>
-                </div>
-            ))}
+            <div className="tab-bar-inner">
+                {tabs.map(tab => (
+                    <div
+                        key={tab.key}
+                        className={`tab-item ${location.pathname === tab.key ? 'active' : ''}`}
+                        onClick={() => navigate(tab.key)}
+                    >
+                        <div className="tab-content">
+                            {React.cloneElement(tab.icon, {
+                                className: `tab-icon ${location.pathname === tab.key ? 'icon-active' : ''}`
+                            })}
+                            <span className="tab-label">{tab.label}</span>
+                        </div>
+                        {location.pathname === tab.key && <div className="tab-indicator" />}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

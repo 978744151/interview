@@ -41,16 +41,20 @@ const categoryItemStyle: React.CSSProperties = {
 const layoutStyle = {
   // overflow: 'scroll',
   width: '100%',
+  // paddingBottom: '70px',
   // height: '100%',
 };
 
 const categoryStyle: React.CSSProperties = {
   marginTop: 24,
-  padding: '0 50px'
+  padding: '0 12px',
+  maxWidth: 1200,
+  marginLeft: 'auto',
+  marginRight: 'auto',
 };
 const blogListStyle: React.CSSProperties = {
   marginTop: 20,
-  padding: '10px 20px',
+  padding: '10px 12px',
   maxWidth: 1200,
   marginLeft: 'auto',
   marginRight: 'auto'
@@ -59,7 +63,6 @@ const blogListStyle: React.CSSProperties = {
 const blogItemStyle: React.CSSProperties = {
   padding: '10px 0px',
   transition: 'background 0.3s',
-
   cursor: 'pointer',
 };
 // 添加类型定义
@@ -108,6 +111,8 @@ const Home: React.FC = () => {
       navigate(`/nft/digitalCollectionPage`);
     } else if (index === 1) {
       navigate(`/nft/notice`);
+    } else {
+      navigate(`/game/game${index - 1}`);
     }
     // if (index) {
     //   navigate(`/game/game${index}`);
@@ -117,14 +122,14 @@ const Home: React.FC = () => {
   }
   return (
     <>
-      <Layout style={layoutStyle}>
+      <Layout style={layoutStyle} className="main-content">
         <DeskHeaderComponents />
         <Content >
           <AnchorComponent blogs={blogs} />
 
           {/* 新增分类模块 */}
           <div style={categoryStyle}>
-            <Title level={4} style={{ marginBottom: 24 }}>热门分类</Title>
+            {/* <Title level={4} style={{ marginBottom: 24 }}>热门分类</Title> */}
             <Grid columns={3} gap={8}>
               {[
                 { name: '数字藏品', icon: '🎨' },
@@ -132,7 +137,7 @@ const Home: React.FC = () => {
                 { name: '数字猜谜', icon: '🎮' },
                 { name: '记忆卡牌', icon: '🃏' },
                 { name: '贪吃蛇', icon: '🐍' },
-                { name: '计算器', icon: '🧮' },
+                { name: '日期计算器', icon: '🧮' },
               ].map((item, index) => (
                 <Grid.Item key={item.name} onClick={() => handleGames(index)}>
                   <div style={categoryItemStyle}>
@@ -145,7 +150,10 @@ const Home: React.FC = () => {
           </div>
           {/* 新增博客列表 */}
           <div style={blogListStyle}>
-            <Title level={4} style={{ marginBottom: 16, fontSize: 18 }}>最新文章</Title>
+            <div className='flex justify-between item-center' style={{ marginBottom: 16 }}>
+              <Title level={4} style={{ fontSize: 18 }}>最新文章</Title>
+              <p style={{ fontSize: 14 }}>查看更多  </p>
+            </div>
             <Skeleton loading={loading} active>
               {blogs.map((blog: Blog) => (
                 <div
@@ -185,13 +193,12 @@ const Home: React.FC = () => {
                       fontSize: 12,
                       color: '#999'
                     }}>
-                      <span onClick={(e) => handleUpdate(blog, e)}>编辑</span>
-                      <span>@{blog?.user?.name || '匿名用户'}</span>
-                      <span style={{ margin: '0 8px' }}>·</span>
-                      <span>❤️ {blog.likes}</span>
-                      <span style={{ margin: '0 8px' }}>·</span>
+                      {/* <span onClick={(e) => handleUpdate(blog, e)}>编辑</span> */}
+                      <span style={{ margin: '0 8px' }}>@{blog?.user?.name || '匿名用户'}</span>
+                      {/* <span style={{ margin: '0 8px' }}>·</span> */}
+                      {/* <span style={{ margin: '0 8px' }}>❤️ {blog.likes}</span> */}
+                      {/* <span style={{ margin: '0 8px' }}>·</span> */}
                       <span style={{
-                        color: '#666',
                         fontSize: 12
                       }}>{blog.createdAt}</span>
                     </div>

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 type DotPosition = CarouselProps['dotPosition'];
 // 添加悬浮动画样式
 const carouselItemStyle: React.CSSProperties = {
-  height: '400px',
+  height: '300px',
   position: 'relative',
   overflow: 'hidden',
   backgroundSize: 'cover',
@@ -39,7 +39,7 @@ interface AnchorProps {
 }
 
 const AnchorComponent: React.FC<AnchorProps> = ({ blogs }) => {
-  const [dotPosition] = useState<DotPosition>('right');
+  const [dotPosition] = useState<DotPosition>('bottom');
   const navigate = useNavigate();
 
   const handleNext = (blog: Blog) => {
