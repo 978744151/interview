@@ -1,0 +1,62 @@
+.comment-item {
+  margin-bottom: 16px;
+  
+  .comment-main {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 8px;
+    
+    .comment-avatar {
+      flex-shrink: 0;
+    }
+    
+    .comment-content {
+      flex: 1;
+      
+      .comment-header {
+        margin-bottom: 8px;
+        
+        .author {
+          font-weight: 500;
+          margin-right: 12px;
+        }
+        
+        .time {
+          color: #999;
+          font-size: 12px;
+        }
+      }
+      
+      .comment-text {
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 8px;
+      }
+      
+      .comment-actions {
+        display: flex;
+        gap: 16px;
+        
+        .ant-btn {
+          padding: 0;
+          height: auto;
+          
+          &:hover {
+            color: #1890ff;
+          }
+          
+          .anticon {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+  }
+  
+  .comment-replies {
+    margin-left: 48px;
+    margin-top: 8px;
+  }
+}

@@ -39,15 +39,27 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info'],
+        passes: 2,
+      },
+      format: {
+        comments: false,
       },
     },
     rollupOptions: {
       output: {
-        chunkFileNames: 'js/[name]-[hash].js', // 引入文件名的名称
-        entryFileNames: 'js/[name]-[hash].js', // 包的入口文件名称
-        assetFileNames: '[ext]/[name]-[hash].[ext]', // 资源文件像 字体，图片等
-        // 静态文件拆分打包
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'antd-vendor': ['antd'],
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
       }
-    }
+    },
+    reportCompressedSize: false,
+    cssCodeSplit: true,
+    sourcemap: false,
+    assetsInlineLimit: 4096,
   },
 });

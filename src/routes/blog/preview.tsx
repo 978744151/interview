@@ -3,14 +3,26 @@ import { AiEditor } from "aieditor";
 import "aieditor/dist/style.css"
 import { useNavigation } from '@/hooks/useNavigation.ts'
 import { getBlogDetail } from '@/api/log.ts'
-import { Skeleton, Typography, Button } from 'antd'
+import { Skeleton, Typography, Button, Input, Avatar, List, message } from 'antd'
 import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom';
 import './preview.scss'
 import { Breadcrumb } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
-
+import CommentItem from '@/components/Comment/index.tsx';
+import { createComment, getComment } from '@/api/comment.ts'
 const { Title, Text } = Typography
+
+interface CommentItem {
+    id: string;
+    content: string;
+    createTime: string;
+    user: {
+        name: string;
+        avatar: string;
+    };
+    replies?: CommentItem[];
+}
 
 function BlogPreview() {
     const containerStyle: React.CSSProperties = {
@@ -73,6 +85,69 @@ function BlogPreview() {
         fetchData()
     }, [id])
 
+    useEffect(() => {
+        fetchComment()
+    }, [id])
+    const fetchComment = async () => {
+        try {
+            const { data } = await getComment({ blogId: id })
+            if (data.success) {
+                setComments(data.data)
+            }
+        } catch (error) {
+            console.error('获取博客详情失败:', error)
+        } finally {
+            setLoading(false)
+        }
+    }
+    const [comments, setComments] = useState<CommentItem[]>([]);
+    const [commentContent, setCommentContent] = useState('');
+    const [replyTo, setReplyTo] = useState<string | null>(null);
+    const { TextArea } = Input;
+
+    // 提交评论
+    const handleSubmitComment = async () => {
+        if (!commentContent.trim()) {
+            message.warning('请输入评论内容');
+            return;
+        }
+        try {
+            // TODO: 调用评论接口
+            const newComment = {
+                blogId: id,
+                content: commentContent,
+            };
+            const { data } = await createComment(newComment)
+            if (!data.success) {
+                message.error('评论失败');
+                return
+            }
+            // await fetchComment()
+            setComments(prev => [newComment, ...prev]);
+            setCommentContent('');
+            message.success('评论成功');
+        } catch (error) {
+            message.error('评论失败');
+        }
+    };
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey && isMobile) {
+            e.preventDefault();
+            handleSubmitComment();
+        }
+    };
+
     return (
         <>
             <div style={containerStyle} className='preview'>
@@ -123,6 +198,87 @@ function BlogPreview() {
                         </>
                     )}
                 </Skeleton>
+
+                <div ref={divRef} style={{
+                    border: '1px solid #f0f0f0',
+                    borderRadius: 4,
+                    padding: 16,
+                    marginBottom: 32
+                }} />
+
+                {/* 评论区域 */}
+                <div className="comments-section">
+                    <Title level={4} style={{ marginBottom: 16 }}>
+                        评论区
+                    </Title>
+
+                    <div className="comment-input">
+                        <TextArea
+                            value={commentContent}
+                            onChange={e => setCommentContent(e.target.value)}
+                            placeholder="写下你的评论..."
+                            autoSize={{ minRows: 3, maxRows: 6 }}
+                            onKeyPress={handleKeyPress}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={handleSubmitComment}
+                            style={{ marginTop: 16, display: isMobile ? 'none' : 'inline-block' }}
+                        >
+                            发表评论
+                        </Button>
+                    </div>
+
+                    <List
+                        className="comment-list"
+                        itemLayout="horizontal"
+                        dataSource={comments}
+                        renderItem={item => (
+                            <CommentItem
+                                // author={item.user.name}
+                                // avatar={item.user.avatar}
+                                content={item.content}
+                                datetime={item.createTime}
+                                likes={item.likes}
+                                onReply={() => setReplyTo(item.id)}
+                                onLike={() => handleLikeComment(item.id)}
+                            >
+                                {replyTo === item.id && (
+                                    <div className="reply-input">
+                                        <TextArea
+                                            placeholder="回复评论..."
+                                            autoSize={{ minRows: 2, maxRows: 4 }}
+                                            style={{ marginBottom: 8 }}
+                                        />
+                                        <Button
+                                            size="small"
+                                            type="primary"
+                                            style={{ marginRight: 8 }}
+                                        >
+                                            提交
+                                        </Button>
+                                        <Button
+                                            size="small"
+                                            onClick={() => setReplyTo(null)}
+                                        >
+                                            取消
+                                        </Button>
+                                    </div>
+                                )}
+                                {item.replies?.map(reply => (
+                                    <CommentItem
+                                        key={reply.id}
+                                        author={reply.user.name}
+                                        avatar={reply.user.avatar}
+                                        content={reply.content}
+                                        datetime={reply.createTime}
+                                        likes={reply.likes}
+                                    />
+                                ))}
+                            </CommentItem>
+                        )}
+                    />
+                </div>
             </div>
         </>
     )

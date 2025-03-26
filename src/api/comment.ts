@@ -1,19 +1,17 @@
 // ...已有接口...
 import request from '@/server/axios.ts'
+import { URLSearchParams } from 'node:url';
 
-export const getBlogList = (params: { page: number; pageSize: number }) => {
+export const getComment = (data:any) => {
     return request({
-      url: '/api/v1/blogs',
-      method: 'get',
-      params: {
-        page: params.page,
-        limit: params.pageSize
-      }
+      url: '/api/v1/comment',
+      method: 'post',
+      data
     })
   }
-  export const createBlog= ( data:any) => {
+  export const createComment= ( data:any) => {
     return request({
-      url: '/api/v1/blogs',
+      url: '/api/v1/comment/create',
       method: 'post',
       data
     })

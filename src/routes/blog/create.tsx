@@ -23,7 +23,7 @@ function BlogCreate() {
     }, [])
     // 提交逻辑
     const handleSubmit = async () => {
-        // const navigate = useNavigate();
+        const navigate = useNavigate();
         try {
             setLoading(true);
             const values = await form.validateFields();
@@ -41,7 +41,7 @@ function BlogCreate() {
 
             message.success('博客创建成功');
             form.resetFields();
-            // navigate('/')
+            navigate('/')
         } catch (error) {
             console.log(error)
             // message.error('提交失败，请重试');
