@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, List, Typography, Tag, Input, Select, DatePicker, Space, Badge } from 'antd';
 import { BellOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { getNoticeList, getNoticeListSync } from '@/api/nft'
+import CustomBreadcrumb from '@/components/CustomBreadcrumb/index.tsx';
+
 const { Title, Text, Paragraph } = Typography;
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -49,6 +51,7 @@ const NoticePage: React.FC = () => {
 
     return (
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px' }} className="main-content">
+            <CustomBreadcrumb title="公告通知"></CustomBreadcrumb>
             <Card>
                 <div style={{ marginBottom: 24 }}>
                     <Title level={4}>

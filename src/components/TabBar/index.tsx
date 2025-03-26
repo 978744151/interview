@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { HomeOutlined, AppstoreOutlined, UserOutlined, BellOutlined } from '@ant-design/icons';
 import './index.scss';
@@ -6,6 +6,7 @@ import './index.scss';
 const TabBar: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     const tabs = [
         { key: '/', icon: <HomeOutlined />, label: '首页' },
@@ -15,25 +16,27 @@ const TabBar: React.FC = () => {
     ];
 
     return (
-        <div className="tab-bar">
-            <div className="tab-bar-inner">
-                {tabs.map(tab => (
-                    <div
-                        key={tab.key}
-                        className={`tab-item ${location.pathname === tab.key ? 'active' : ''}`}
-                        onClick={() => navigate(tab.key)}
-                    >
-                        <div className="tab-content">
-                            {React.cloneElement(tab.icon, {
-                                className: `tab-icon ${location.pathname === tab.key ? 'icon-active' : ''}`
-                            })}
-                            <span className="tab-label">{tab.label}</span>
+        <>
+            {true && <div className="tab-bar">
+                <div className="tab-bar-inner">
+                    {tabs.map(tab => (
+                        <div
+                            key={tab.key}
+                            className={`tab-item ${location.pathname === tab.key ? 'active' : ''}`}
+                            onClick={() => navigate(tab.key)}
+                        >
+                            <div className="tab-content">
+                                {React.cloneElement(tab.icon, {
+                                    className: `tab-icon ${location.pathname === tab.key ? 'icon-active' : ''}`
+                                })}
+                                <span className="tab-label">{tab.label}</span>
+                            </div>
+                            {location.pathname === tab.key && <div className="tab-indicator" />}
                         </div>
-                        {location.pathname === tab.key && <div className="tab-indicator" />}
-                    </div>
-                ))}
-            </div>
-        </div>
+                    ))}
+                </div>
+            </div>}
+        </>
     );
 };
 

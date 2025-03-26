@@ -63,7 +63,7 @@ const headerRightComponents: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-      <Button
+      {/* <Button
         type="primary"
         icon={<PlusOutlined />}
         onClick={handleCreateBlog}
@@ -78,7 +78,7 @@ const headerRightComponents: React.FC = () => {
         }}
       >
         新建博客
-      </Button>
+      </Button> */}
 
       <Dropdown
         menu={{ items }}

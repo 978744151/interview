@@ -1,13 +1,13 @@
 // ...已有接口...
 import request from '@/server/axios.ts'
 
-export const getBlogList = (params: { page: number; pageSize: number }) => {
+export const getBlogList = (params: any) => {
     return request({
       url: '/api/v1/blogs',
       method: 'get',
       params: {
         page: params.page,
-        limit: params.pageSize
+        prePage: params.prePage
       }
     })
   }

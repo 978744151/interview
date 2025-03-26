@@ -38,7 +38,7 @@ import './index.css'
 const router = createHashRouter([
   {
     path: "/",
-    element: <RootLayout />,
+    // element: <RootLayout />,
     children: [
       {
         path: "/",
@@ -95,7 +95,7 @@ const router = createHashRouter([
 
       {
         path: 'blog',
-        element: <MainLayout />,
+        // element: <MainLayout />,
         children: [
           {
             path: "create",

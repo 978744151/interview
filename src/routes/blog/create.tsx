@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import AIEditor from '../../components/AIEditor';
-// ... existing imports ...
+import CustomBreadcrumb from '@/components/CustomBreadcrumb/index.tsx';
+
 import { Button, Form, Input, message } from 'antd';
 import { createBlog } from '@/api/log';
 import { useNavigate } from "react-router-dom";
@@ -11,10 +12,11 @@ function BlogCreate() {
     const [value, setValue] = useState("");
     const containerStyle = {
         marginTop: 20,
-        padding: '0 50px',
+        padding: '0 12px',
         maxWidth: 1200,
         marginLeft: 'auto',
-        marginRight: 'auto'
+        marginRight: 'auto',
+        paddingBottom: 100
     }
 
     //初始化 AiEditor
@@ -52,7 +54,9 @@ function BlogCreate() {
 
     return (
         <>
+
             <div style={containerStyle}>
+                <CustomBreadcrumb title="创建博客" />
                 <Form form={form} layout="vertical">
                     <Form.Item
                         label="标题"
@@ -65,7 +69,6 @@ function BlogCreate() {
                     <Form.Item
                         label="摘要"
                         name="summary"
-                        rules={[{ required: true, message: '请输入摘要' }]}
                     >
                         <Input.TextArea
                             placeholder="请输入博客摘要"
@@ -87,6 +90,7 @@ function BlogCreate() {
                         onClick={handleSubmit}
                         loading={loading}
                         size="large"
+                        style={{ width: '100%' }}
                     >
                         立即发布
                     </Button>

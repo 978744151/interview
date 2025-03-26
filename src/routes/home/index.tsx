@@ -9,8 +9,9 @@ const { Title } = Typography;
 import { getBlogList, createBlog } from '@/api/log.ts';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import TabBar from '../../components/TabBar';
 import { Grid } from 'antd-mobile';
+import TabBar from '@/components/TabBar/index.tsx';
+import FloatingButton from '@/components/FloatingButton/index.tsx';
 
 const blogCardStyle: React.CSSProperties = {
   boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
@@ -93,7 +94,7 @@ const Home: React.FC = () => {
     // const { datas } = await createBlog({ title: 123, summary: '关于本次会议纪要', })
 
     const { data } = await getBlogList({ page: 1, pageSize: 10 });
-    setBlogs(data.data)
+    setBlogs(data.data.data)
     setLoading(false)
     // 处理数据...
   }
@@ -108,10 +109,14 @@ const Home: React.FC = () => {
   };
   const handleGames = (index: number) => {
     if (index === 0) {
-      navigate(`/nft/digitalCollectionPage`);
+      navigate(`/blog/list`);
     } else if (index === 1) {
+      navigate(`/nft/digitalCollectionPage`);
+
+    } else if (index === 2) {
       navigate(`/nft/notice`);
     } else {
+
       navigate(`/game/game${index - 1}`);
     }
     // if (index) {
@@ -132,12 +137,13 @@ const Home: React.FC = () => {
             {/* <Title level={4} style={{ marginBottom: 24 }}>热门分类</Title> */}
             <Grid columns={3} gap={8}>
               {[
+                { name: '盈亏论坛', icon: '🎨' },
                 { name: '数字藏品', icon: '🎨' },
                 { name: '公告管理', icon: '📢' },
-                { name: '数字猜谜', icon: '🎮' },
-                { name: '记忆卡牌', icon: '🃏' },
-                { name: '贪吃蛇', icon: '🐍' },
-                { name: '日期计算器', icon: '🧮' },
+                // { name: '数字猜谜', icon: '🎮' },
+                // { name: '记忆卡牌', icon: '🃏' },
+                // { name: '贪吃蛇', icon: '🐍' },
+                // { name: '日期计算器', icon: '🧮' },
               ].map((item, index) => (
                 <Grid.Item key={item.name} onClick={() => handleGames(index)}>
                   <div style={categoryItemStyle}>
@@ -224,6 +230,7 @@ const Home: React.FC = () => {
           </div>
         </Content >
       </Layout >
+      <FloatingButton></FloatingButton>
       <TabBar />
     </>
   )

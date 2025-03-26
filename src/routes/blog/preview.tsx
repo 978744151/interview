@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom';
 import './preview.scss'
 import { Breadcrumb } from 'antd';
-import { HomeOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 import CommentItem from '@/components/Comment/index.tsx';
 import { createComment, getComment } from '@/api/comment.ts'
 const { Title, Text } = Typography
@@ -152,8 +152,10 @@ function BlogPreview() {
         <>
             <div style={containerStyle} className='preview'>
                 <Breadcrumb style={{ marginBottom: 24 }}>
-                    <Breadcrumb.Item><HomeOutlined onClick={goBack} /></Breadcrumb.Item>
-                    <Breadcrumb.Item> {blogData?.title}</Breadcrumb.Item>
+                    <Breadcrumb.Item><LeftOutlined style={{ fontSize: 18 }} onClick={goBack} /></Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        <div className="truncate max-w-[300px]">{blogData?.title}</div>
+                    </Breadcrumb.Item>
                 </Breadcrumb>
                 <Skeleton loading={loading} active>
                     {blogData && (
@@ -235,9 +237,9 @@ function BlogPreview() {
                         dataSource={comments}
                         renderItem={item => (
                             <CommentItem
-                                // author={item.user.name}
+                                author={item.user?.name}
                                 // avatar={item.user.avatar}
-                                content={item.content}
+                                content={item?.content}
                                 datetime={item.createTime}
                                 likes={item.likes}
                                 onReply={() => setReplyTo(item.id)}

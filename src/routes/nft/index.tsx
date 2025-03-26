@@ -6,6 +6,8 @@ import { div } from 'framer-motion/client';
 import { AppstoreOutlined, BarsOutlined, HeartFilled } from '@ant-design/icons';
 import DeskHeaderComponents from '@/routes/home/desk-header.tsx'
 import './index.scss'
+import TabBar from '@/components/TabBar/index.tsx';
+
 // 添加搜索历史类型
 interface SearchHistory {
     keyword: string;
@@ -284,6 +286,7 @@ const DigitalCollectionPage: React.FC = () => {
                         </Col>
                     ))}
                 </Row>
+                <TabBar />
 
             </div>
         </>

@@ -33,12 +33,12 @@ button {
 }
 /* 为除登录注册外的页面添加底部padding */
 #root > div:not(.login-container) {
-  padding-bottom: 70px;
+  /* padding-bottom: 70px; */
 }
 
 /* 添加主内容区的样式 */
 .main-content {
-  /* padding-bottom: 70px; */
+  padding-bottom: 70px;
 }
 #error-page {
   display: flex;

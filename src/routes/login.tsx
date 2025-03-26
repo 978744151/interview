@@ -81,7 +81,7 @@ const Login: React.FC = () => {
                 autoComplete="off"
               >
                 <Form.Item<FieldType>
-                  label="手机号"
+                  label="邮箱"
                   name="email"
                   rules={[{ required: true, message: '请输入手机号!' }]}
                 >
@@ -101,7 +101,7 @@ const Login: React.FC = () => {
                   valuePropName="checked"
                 >
                   {/* <Checkbox>子</Checkbox> */}
-                  未注册用户自动注册登录
+                  未注册用户 自动注册
                 </Form.Item>
 
                 <Form.Item className="login-buttons">

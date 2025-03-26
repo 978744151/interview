@@ -5,6 +5,8 @@ import { UserOutlined } from '@ant-design/icons';
 import DeskHeaderComponents from './home/desk-header'
 import { getUserInfo, updateUser } from '../api/login';
 import { useEffect, useState } from 'react';
+import TabBar from '@/components/TabBar/index.tsx';
+
 const ProfilePage = () => {
     // 示例数据，实际应从store或API获取
 
@@ -93,7 +95,7 @@ const ProfilePage = () => {
                             formData.email
                         )}
                     </Descriptions.Item>
-                    <Descriptions.Item label="角色">
+                    {/* <Descriptions.Item label="角色">
                         {isEditing ? (
                             <Input
                                 value={formData.role}
@@ -102,9 +104,11 @@ const ProfilePage = () => {
                         ) : (
                             formData.role
                         )}
-                    </Descriptions.Item>
+                    </Descriptions.Item> */}
                 </Descriptions>
+
             </Card>
+            <TabBar />
         </>
     );
 

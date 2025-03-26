@@ -4,6 +4,9 @@ import { SearchOutlined, FireFilled, MessageOutlined, EyeOutlined } from '@ant-d
 import { useNavigate } from 'react-router-dom';
 import './index.scss';
 import { getBlogList } from '../../api/log';
+import { PlusOutlined } from '@ant-design/icons';
+import TabBar from '@/components/TabBar/index.tsx';
+import FloatingButton from '@/components/FloatingButton/index.tsx';
 
 const { Text } = Typography;
 
@@ -38,7 +41,7 @@ const ForumList: React.FC = () => {
         // const { datas } = await createBlog({ title: 123, summary: '关于本次会议纪要', })
 
         const { data } = await getBlogList({ page: 1, pageSize: 10 });
-        setBlogs(data.data)
+        setBlogs(data.data.data)
         setLoading(false)
         // 处理数据...
     }
@@ -90,6 +93,10 @@ const ForumList: React.FC = () => {
     const handleNext = (blog: Blog, event?: React.MouseEvent) => {
         navigate(`/blog/${blog._id}`);
     };
+    const handleCreatePost = () => {
+        navigate('/blog/create');
+    };
+
     return (
         <div className="forum-list-container">
             <div className="tab-header">
@@ -149,6 +156,8 @@ const ForumList: React.FC = () => {
                     </List.Item>
                 )}
             />
+            <FloatingButton onClick={handleCreatePost} />
+            <TabBar />
         </div>
     );
 };
