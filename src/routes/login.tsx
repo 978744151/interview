@@ -83,9 +83,9 @@ const Login: React.FC = () => {
                 <Form.Item<FieldType>
                   label="邮箱"
                   name="email"
-                  rules={[{ required: true, message: '请输入手机号!' }]}
+                  rules={[{ required: true, message: '请输入邮箱!' }]}
                 >
-                  <Input size="large" placeholder="请输入手机号" />
+                  <Input size="large" placeholder="请输入邮箱" />
                 </Form.Item>
 
                 <Form.Item<FieldType>
@@ -93,7 +93,7 @@ const Login: React.FC = () => {
                   name="password"
                   rules={[{ required: true, message: '请输入密码!' }]}
                 >
-                  <Input.Password size="large" placeholder="请输入密码" />
+                  <Input.Password size="large" placeholder="请输入密码,不少于6位数" />
                 </Form.Item>
 
                 <Form.Item<FieldType>
