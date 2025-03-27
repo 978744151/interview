@@ -4,13 +4,17 @@ import "aieditor/dist/style.css"
 import { useNavigation } from '@/hooks/useNavigation.ts'
 import { getBlogDetail } from '@/api/log.ts'
 import { Skeleton, Typography, Button, Input, Avatar, List, message } from 'antd'
+// import { List, Switch } from 'antd-mobile'
+import { createLike } from '@/api/comment.ts'
+
 import dayjs from 'dayjs'
 import { useParams } from 'react-router-dom';
 import './preview.scss'
 import { Breadcrumb } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import CommentItem from '@/components/Comment/index.tsx';
-import { createComment, getComment } from '@/api/comment.ts'
+import { createComment, getComment, commentIdReply } from '@/api/comment.ts'
+import { comment } from 'postcss';
 const { Title, Text } = Typography
 
 interface CommentItem {
@@ -38,7 +42,7 @@ function BlogPreview() {
     const { id } = useParams();
     const { navigate, goBack } = useNavigation()
     const divRef = useRef<HTMLDivElement>(null)
-
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
     // 初始化只读编辑器
     useEffect(() => {
         if (!blogData?.content || !divRef.current) return
@@ -104,34 +108,10 @@ function BlogPreview() {
     const [commentContent, setCommentContent] = useState('');
     const [replyTo, setReplyTo] = useState<string | null>(null);
     const { TextArea } = Input;
-
-    // 提交评论
-    const handleSubmitComment = async () => {
-        if (!commentContent.trim()) {
-            message.warning('请输入评论内容');
-            return;
-        }
-        try {
-            // TODO: 调用评论接口
-            const newComment = {
-                blogId: id,
-                content: commentContent,
-            };
-            const { data } = await createComment(newComment)
-            if (!data.success) {
-                message.error('评论失败');
-                return
-            }
-            // await fetchComment()
-            setComments(prev => [newComment, ...prev]);
-            setCommentContent('');
-            message.success('评论成功');
-        } catch (error) {
-            message.error('评论失败');
-        }
-    };
-
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -147,6 +127,77 @@ function BlogPreview() {
             handleSubmitComment();
         }
     };
+    // 在状态部分添加
+    const [currentCommentId, setCurrentCommentId] = useState<string | null>(null);
+
+    // 修改 handleOnOpenModal 函数
+    const handleOnOpenModal = async (info: { author: string; content: string, commentId: string }) => {
+        console.log(info)
+        setReplyInfo(info);
+        setCurrentCommentId(info.commentId);
+        setIsModalVisible(true);
+    };
+    const handleLikeComment = async (commentId: string) => {
+        console.log(commentId)
+        try {
+            const { data } = await createLike({ commentId });
+            if (data.success) {
+                // message.success('点赞成功');
+                await fetchComment(); // 刷新评论列表
+            }
+        } catch (error) {
+            message.error('点赞失败');
+        }
+    };    // 修改提交评论函数
+    const handleSubmitComment = async () => {
+        console.log(`123`)
+        if (!commentContent.trim()) {
+            message.warning('请输入评论内容');
+            return;
+        }
+        try {
+            if (currentCommentId) {
+                // 发送子评论
+                const { data } = await commentIdReply({
+                    commentId: currentCommentId,
+                    content: commentContent,
+                    blog: id,
+                });
+                if (!data.success) {
+                    message.error('回复失败');
+                    return;
+                }
+                message.success('回复成功');
+                await fetchComment();
+            } else {
+                // 发送主评论
+                const newComment = {
+                    blogId: id,
+                    content: commentContent,
+                };
+                const { data } = await createComment(newComment);
+                if (!data.success) {
+                    message.error('评论失败');
+                    return;
+                }
+                message.success('评论成功');
+                setComments(prev => [data.data, ...prev]);
+                setCommentContent('');
+            }
+
+            // 重置状态
+            setCommentContent('');
+            setIsModalVisible(false);
+            setCurrentCommentId(null);
+            setReplyInfo(null);
+            // 刷新评论列表
+
+        } catch (error) {
+            message.error(currentCommentId ? '回复失败' : '评论失败');
+        }
+    };
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [replyInfo, setReplyInfo] = useState<{ author: string; content: string } | null>(null);
 
     return (
         <>
@@ -172,7 +223,7 @@ function BlogPreview() {
                             }}>
                                 <Text>作者：{blogData.createName || '匿名用户'}</Text>
                                 <Text>发布时间：{dayjs(blogData.createdAt).format('YYYY-MM-DD HH:mm')}</Text>
-                                <Text>❤️ {blogData.likes} 点赞</Text>
+                                {/* <Text>❤️ {blogData.likes} 点赞</Text> */}
                             </div>
 
                             <Title level={4} style={{ marginBottom: 16 }}>
@@ -201,34 +252,25 @@ function BlogPreview() {
                     )}
                 </Skeleton>
 
-                <div ref={divRef} style={{
-                    border: '1px solid #f0f0f0',
-                    borderRadius: 4,
-                    padding: 16,
-                    marginBottom: 32
-                }} />
-
                 {/* 评论区域 */}
                 <div className="comments-section">
                     <Title level={4} style={{ marginBottom: 16 }}>
                         评论区
                     </Title>
 
-                    <div className="comment-input">
-                        <TextArea
-                            value={commentContent}
-                            onChange={e => setCommentContent(e.target.value)}
-                            placeholder="写下你的评论..."
-                            autoSize={{ minRows: 3, maxRows: 6 }}
-                            onKeyPress={handleKeyPress}
-                        />
-                        <Button
-                            type="primary"
-                            onClick={handleSubmitComment}
-                            style={{ marginTop: 16, display: isMobile ? 'none' : 'inline-block' }}
-                        >
-                            发表评论
-                        </Button>
+                    <div className="comment-input-wrapper" onClick={() => {
+                        textareaRef.current?.focus()
+                        setIsModalVisible(true)
+                    }}>
+                        <Avatar src="https://api.dicebear.com/7.x/avataaars/svg" className="avatar" />
+                        <div className="input-container">
+                            写点什么吧...
+                        </div>
+                        {!isMobile && (
+                            <Button type="primary" onClick={() => handleSubmitComment}>
+                                发表
+                            </Button>
+                        )}
                     </div>
 
                     <List
@@ -237,13 +279,23 @@ function BlogPreview() {
                         dataSource={comments}
                         renderItem={item => (
                             <CommentItem
+                                // ... 其他属性
+                                // onFocus={() => {
+                                //     // 可以在这里添加额外的聚焦逻辑
+                                //     const textarea = document.querySelector('.comment-input textarea');
+                                //     if (textarea) {
+                                //         (textarea as HTMLTextAreaElement).focus();
+                                //     }
+                                // }}
                                 author={item.user?.name}
                                 // avatar={item.user.avatar}
                                 content={item?.content}
                                 datetime={item.createTime}
-                                likes={item.likes}
-                                onReply={() => setReplyTo(item.id)}
-                                onLike={() => handleLikeComment(item.id)}
+                                likeCount={item.likeCount}
+                                item={item}
+                                // onReply={() => handleSetReplyTo(item.id)}
+                                onLike={handleLikeComment}
+                                onOpenModal={handleOnOpenModal}
                             >
                                 {replyTo === item.id && (
                                     <div className="reply-input">
@@ -274,7 +326,9 @@ function BlogPreview() {
                                         avatar={reply.user.avatar}
                                         content={reply.content}
                                         datetime={reply.createTime}
-                                        likes={reply.likes}
+                                        likeCount={reply.likeCount}
+                                        onClick={() => handleOnOpenModal(reply)}
+
                                     />
                                 ))}
                             </CommentItem>
@@ -282,6 +336,48 @@ function BlogPreview() {
                     />
                 </div>
             </div>
+            <div
+                className={`modal-backdrop ${isModalVisible ? 'visible' : ''}`}
+                onClick={() => setIsModalVisible(false)}
+            />
+            <div className={`comment-modal ${isModalVisible ? 'visible' : ''}`}>
+                <div className="modal-content">
+                    {replyInfo && (
+                        <div className="reply-info">
+                            <div className="reply-to">回复 {replyInfo?.author}</div>
+                            <div className="reply-content" title={replyInfo?.content}>
+                                {replyInfo?.content}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="modal-content">
+                    <div className="input-wrapper">
+                        <textarea
+                            value={commentContent}
+                            onChange={e => setCommentContent(e.target.value)}
+                            placeholder="写下你的评论..."
+                            autoFocus
+                            ref={textareaRef}
+                            onKeyPress={handleKeyPress}
+                        />
+                        {/* <div className="emoji-buttons">
+                            <button className="emoji-btn">😊</button>
+                            <button className="emoji-btn">👍</button>
+                            <button className="emoji-btn">😄</button>
+                        </div> */}
+                    </div>
+                    <div className="action-buttons">
+                        <button className="cancel" onClick={() => setIsModalVisible(false)}>
+                            取消
+                        </button>
+                        <button className="submit" onClick={() => handleSubmitComment()} >
+                            发送
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </>
     )
 }

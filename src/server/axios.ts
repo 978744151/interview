@@ -3,6 +3,7 @@ import type { newAxiosRequestConfig } from './typed'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { getStore } from '../utils/store'
 import { message } from 'antd'
+
 axios.defaults.timeout = 30000
 const baseRequestConfig: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_BASE_URL
@@ -29,8 +30,9 @@ instancs.interceptors.response.use(
     console.log(error)
     if (error.response.status === 401) {
       message.error(error.response.data.error)
+      window.location.href = '/#/login'
     }
-    if(!error.response.data.success) {
+    else if(!error.response.data.success) {
       message.error(error.response.data.error)
     }
     return Promise.reject(new Error(error))

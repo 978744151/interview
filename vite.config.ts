@@ -13,6 +13,8 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0', // 监听所有网络接口
+    open: true     ,  // 自动打开浏览器（可选）
     port: 1881,
     proxy: {
       '/api': {

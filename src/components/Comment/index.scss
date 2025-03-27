@@ -1,62 +1,141 @@
 .comment-item {
   margin-bottom: 16px;
-  
+
   .comment-main {
     display: flex;
     gap: 16px;
-    padding: 16px;
-    background: #fafafa;
+    padding: 12px;
+    // background: #fafafa;
     border-radius: 8px;
-    
+    width: 100%;
+
     .comment-avatar {
       flex-shrink: 0;
     }
-    
+
     .comment-content {
       flex: 1;
-      
+
       .comment-header {
         margin-bottom: 8px;
-        
+
         .author {
           font-weight: 500;
           margin-right: 12px;
         }
-        
+
         .time {
           color: #999;
           font-size: 12px;
         }
       }
-      
+
       .comment-text {
         color: #333;
         line-height: 1.6;
         margin-bottom: 8px;
-      }
-      
-      .comment-actions {
         display: flex;
-        gap: 16px;
-        
-        .ant-btn {
-          padding: 0;
-          height: auto;
-          
-          &:hover {
-            color: #1890ff;
+        align-items: center;
+        gap: 8px;
+
+        &::after {
+          content: '回复';
+          font-size: 12px;
+          color: #bbb;
+          cursor: pointer;
+        }
+      }
+
+      .meta-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #999;
+
+        .like-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .ant-btn {
+            padding: 0;
+            height: auto;
+            color: #999;
+
+            &:hover {
+              color: #1890ff;
+            }
           }
-          
-          .anticon {
-            margin-right: 4px;
+
+          .like-count {
+            font-size: 12px;
+            color: #bbb;
+            margin-top: 2px;
           }
         }
       }
     }
+
+    .comment-actions {
+      display: flex;
+      gap: 16px;
+
+      .ant-btn {
+        padding: 0;
+        height: auto;
+
+        &:hover {
+          color: #1890ff;
+        }
+
+        .anticon {
+          margin-right: 4px;
+        }
+      }
+    }
   }
-  
+
   .comment-replies {
     margin-left: 48px;
     margin-top: 8px;
   }
+
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    width: 100%;
+
+    .meta-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #999;
+
+      .ant-btn {
+        padding: 0;
+        height: auto;
+        color: #999;
+
+        &:hover {
+          color: #1890ff;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .comment-main {
+      cursor: pointer;
+
+      &:active {
+        background: #f9f9f9;
+      }
+    }
+  }
+}
+
+.liked {
+  color: #ff4d4f; // 使用红色而不是蓝色
 }

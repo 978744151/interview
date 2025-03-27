@@ -16,6 +16,23 @@ export const getComment = (data:any) => {
       data
     })
   }
+
+  export const createLike= ( data:any) => {
+    return request({
+      url: '/api/v1/comment/like',
+      method: 'post',
+      data
+    })
+  }
+
+  export const commentIdReply= (data:any) => {
+    return request({
+      url: `/api/v1/comment/reply`,
+      method: 'post',
+      data
+    })
+  }
+
   export const updateBlog= ( id:any,data:any) => {
     return request({
       url: `/api/v1/blogs/${id}`,
