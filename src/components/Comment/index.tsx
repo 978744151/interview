@@ -43,10 +43,12 @@ const CommentItem: React.FC<CommentProps> = ({
 }) => {
     const [showActionSheet, setShowActionSheet] = useState(false);
 
-    const handleTouchStart = () => {
+    const handleTouchStart = (e: any) => {
+        e.stopPropagation();
+        e.preventDefault();
         const timer = setTimeout(() => {
             setShowActionSheet(true);
-        }, 800);
+        }, 500);
         setPressTimer(timer);
     }; const handleClick = () => {
         if (isMobile) {
