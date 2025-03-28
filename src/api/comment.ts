@@ -33,10 +33,10 @@ export const getComment = (data:any) => {
     })
   }
 
-  export const updateBlog= ( id:any,data:any) => {
+  export const deleteComment= ( id:any,data:any) => {
     return request({
-      url: `/api/v1/blogs/${id}`,
-      method: 'put',
+      url: `/api/v1/comment/${id}`,
+      method: 'delete',
       data         
     })
   }

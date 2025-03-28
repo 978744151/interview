@@ -67,6 +67,7 @@ export const getStore = (params: Params) => {
 export const removeStore = (params: Params) => {
   let { name, type } = params
   name = keyName + name
+  console.log(name)
   if (type) {
     window.sessionStorage.removeItem(name)
   } else {

@@ -51,7 +51,7 @@ function BlogPreview() {
             content: blogData.content,
             contentIsMarkdown: true,
             editable: false, // 禁用编辑
-            plugins: [],      // 禁用所有插件
+            // plugins: [],      // 禁用所有插件
             codeBlock: {
                 languages: [
                     { name: 'Auto', value: 'auto' },
@@ -132,6 +132,8 @@ function BlogPreview() {
 
     // 修改 handleOnOpenModal 函数
     const handleOnOpenModal = async (info: { author: string; content: string, commentId: string }) => {
+        textareaRef.current?.focus()
+        setCommentContent('');
         setReplyInfo(info);
         setCurrentCommentId(info.commentId);
         setIsModalVisible(true);
@@ -261,6 +263,8 @@ function BlogPreview() {
                     <div className="comment-input-wrapper" onClick={() => {
                         textareaRef.current?.focus()
                         setIsModalVisible(true)
+                        setReplyInfo(null);
+                        setCurrentCommentId(null);
                     }}>
                         <Avatar src="https://api.dicebear.com/7.x/avataaars/svg" className="avatar" />
                         <div className="input-container">
@@ -296,6 +300,7 @@ function BlogPreview() {
                                 // onReply={() => handleSetReplyTo(item.id)}
                                 onLike={handleLikeComment}
                                 onOpenModal={handleOnOpenModal}
+                                onfetchComment={fetchComment}
                             >
                                 {replyTo === item.id && (
                                     <div className="reply-input">
@@ -330,6 +335,7 @@ function BlogPreview() {
                                         onLike={handleLikeComment}
                                         onOpenModal={handleOnOpenModal}
                                         item={reply}
+                                        onfetchComment={fetchComment}
                                     />
                                 ))}
                             </CommentItem>

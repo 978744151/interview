@@ -1,7 +1,6 @@
 import { Button, Input, Space, Card, Descriptions, Avatar } from 'antd';
 import { EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
-import { UserOutlined } from '@ant-design/icons';
 import DeskHeaderComponents from './home/desk-header'
 import { getUserInfo, updateUser } from '../api/login';
 import { useEffect, useState } from 'react';

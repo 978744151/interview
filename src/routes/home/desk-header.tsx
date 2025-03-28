@@ -3,7 +3,8 @@ import { DownOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Space, Divider, theme, Layout, Button, Typography, Avatar } from 'antd';
 import { useNavigate } from "react-router-dom";
-import { getStore } from '@/utils/store.ts';
+import { getStore, removeStore } from '@/utils/store.ts';
+
 const { Text } = Typography;
 
 const { useToken } = theme;
@@ -23,6 +24,9 @@ const headerRightComponents: React.FC = () => {
   const { token } = useToken();
   const navigate = useNavigate();
   const handleUnLogin = () => {
+    removeStore({ name: 'userInfo' })
+    removeStore({ name: 'token' })
+
     navigate('/login')
   }
   const handleBase = () => {

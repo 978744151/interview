@@ -29,11 +29,11 @@ instancs.interceptors.response.use(
   (error) => {
     console.log(error)
     if (error.response.status === 401) {
-      message.error(error.response.data.error)
+      message.error(error.response.data.message)
       window.location.href = '/#/login'
     }
     else if(!error.response.data.success) {
-      message.error(error.response.data.error)
+      message.error(error.response.data.message)
     }
     return Promise.reject(new Error(error))
   }
