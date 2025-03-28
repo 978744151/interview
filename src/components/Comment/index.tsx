@@ -34,13 +34,7 @@ const CommentItem: React.FC<CommentProps> = ({
     onOpenModal,
     item
 }) => {
-    // const onLike = () => {
-    //     // 处理点赞逻辑
-    //     console.log('点赞', item?.id);
-    //     createLike({
-    //         commentId: item?.id
-    //     })
-    // };
+
     const handleClick = () => {
         if (isMobile) {
             onReply?.();
@@ -54,31 +48,22 @@ const CommentItem: React.FC<CommentProps> = ({
             }
         }
     };
-    const handleChildrenClick = (e: React.MouseEvent) => {
 
-        console.log(123)
-        e.stopPropagation();
-        if (item?.replies?.length > 0) {
-            onOpenModal?.({
-                author: item.replies[0].user?.name,
-                content: item.replies[0].content,
-                commentId: item.replies[0].id
-            });
-        }
-    };
     const handleOnOpenModal = (e: React.MouseEvent) => {
         e.stopPropagation();
         onOpenModal?.({
+            ...item,
             author,
             content,
-            commentId: item?.id
+            commentId: item?.id,
+            replyTo: item?.user._id,
         });
     };
     return (
         <div className="comment-item">
-            <div className="comment-main" onClick={() => handleClick()}>
-                <Avatar src={avatar} className="comment-avatar" />
-                <div className="comment-content" onClick={handleOnOpenModal}>
+            <div className="comment-main" >
+                <Avatar src={item.user.avatar} className="comment-avatar" />
+                <div className="comment-content">
                     <div className="comment-header">
                         <div>
                             <span className="author">{author}</span>
@@ -109,11 +94,12 @@ const CommentItem: React.FC<CommentProps> = ({
                             </div>
                         </div>
                     </div>
-                    <div className="comment-text"  >{content}</div>
+                    <div className="comment-text" onClick={handleOnOpenModal} >  {item.toUserName && <Button type="link" size='small' style={{ color: " #3f3f3f " }}>回复 {item.toUserName}:
+                    </Button>}{content} {!item.parentId && <span className="comment-text-reply" >回复</span>} </div>
                 </div>
             </div>
-            {children && <div className="comment-replies" onClick={handleChildrenClick}>{children}</div>}
-        </div>
+            {children && <div className="comment-replies" >{children}</div>}
+        </div >
     );
 };
 

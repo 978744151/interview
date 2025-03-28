@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Checkbox, Form, type FormProps, Input, theme, message, Row, Col } from 'antd';
 import { loginUser, getUserInfo } from '@/api/login'
 import { setStore } from '@/utils/store'
@@ -26,19 +26,34 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 const Login: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    const { data } = await loginUser(values)
-    if (data.success) {
-      setStore({ type: 'local', content: data.token, name: 'token' })
-      getUserInfoFunc()
+    console.log('Success:', loading);
+    if (loading) return;
+    setLoading(true);
+    try {
+      const { data } = await loginUser(values)
+      if (data.success) {
+        setStore({ type: 'local', content: data.token, name: 'token' })
+        getUserInfoFunc()
+        messageApi.open({
+          type: 'success',
+          content: '登录成功',
+        });
+        setTimeout(() => {
+          navigate('/', { replace: true })
+        }, 500);
+      }
+    } catch (error) {
       messageApi.open({
         type: 'success',
-        content: '登录成功',
+        content: '登录失败',
       });
-
-      setTimeout(() => {
-        navigate('/', { replace: true })
-      }, 1000);
+      setLoading(false);
+      // 错误处理
+    } finally {
+      // 
     }
   };
   const getUserInfoFunc = () => {
@@ -105,12 +120,16 @@ const Login: React.FC = () => {
                 </Form.Item>
 
                 <Form.Item className="login-buttons">
-                  <Button type="primary" htmlType="submit" size="large" block>
-                    登录
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    size="large"
+                    block
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    {loading ? '登录中...' : '登录'}
                   </Button>
-                  {/* <Button size="large" block onClick={handleRegister}>
-                    注册账号
-                  </Button> */}
                 </Form.Item>
               </Form>
             </div>

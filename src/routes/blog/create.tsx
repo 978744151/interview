@@ -18,6 +18,7 @@ function BlogCreate() {
         marginRight: 'auto',
         paddingBottom: 100
     }
+    const navigate = useNavigate();
 
     //初始化 AiEditor
     useEffect(() => {
@@ -25,7 +26,6 @@ function BlogCreate() {
     }, [])
     // 提交逻辑
     const handleSubmit = async () => {
-        const navigate = useNavigate();
         try {
             setLoading(true);
             const values = await form.validateFields();

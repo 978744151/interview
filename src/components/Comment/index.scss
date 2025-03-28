@@ -31,19 +31,23 @@
       }
 
       .comment-text {
-        color: #333;
+        color: #000;
         line-height: 1.6;
         margin-bottom: 8px;
         display: flex;
         align-items: center;
         gap: 8px;
-
-        &::after {
-          content: '回复';
+        &-reply{
           font-size: 12px;
           color: #bbb;
           cursor: pointer;
         }
+        // &::after {
+        //   content: '回复';
+        //   font-size: 12px;
+        //   color: #bbb;
+        //   cursor: pointer;
+        // }
       }
 
       .meta-info {

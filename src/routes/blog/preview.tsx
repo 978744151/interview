@@ -14,7 +14,6 @@ import { Breadcrumb } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import CommentItem from '@/components/Comment/index.tsx';
 import { createComment, getComment, commentIdReply } from '@/api/comment.ts'
-import { comment } from 'postcss';
 const { Title, Text } = Typography
 
 interface CommentItem {
@@ -109,7 +108,8 @@ function BlogPreview() {
     const [replyTo, setReplyTo] = useState<string | null>(null);
     const { TextArea } = Input;
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [replyInfo, setReplyInfo] = useState<any>(null);
 
 
 
@@ -132,7 +132,6 @@ function BlogPreview() {
 
     // 修改 handleOnOpenModal 函数
     const handleOnOpenModal = async (info: { author: string; content: string, commentId: string }) => {
-        console.log(info)
         setReplyInfo(info);
         setCurrentCommentId(info.commentId);
         setIsModalVisible(true);
@@ -150,7 +149,6 @@ function BlogPreview() {
         }
     };    // 修改提交评论函数
     const handleSubmitComment = async () => {
-        console.log(`123`)
         if (!commentContent.trim()) {
             message.warning('请输入评论内容');
             return;
@@ -158,10 +156,12 @@ function BlogPreview() {
         try {
             if (currentCommentId) {
                 // 发送子评论
+                const replyTo = replyInfo?.replyTo;
                 const { data } = await commentIdReply({
                     commentId: currentCommentId,
                     content: commentContent,
                     blog: id,
+                    replyTo
                 });
                 if (!data.success) {
                     message.error('回复失败');
@@ -174,6 +174,7 @@ function BlogPreview() {
                 const newComment = {
                     blogId: id,
                     content: commentContent,
+                    fromUserName: replyInfo?.user?.name
                 };
                 const { data } = await createComment(newComment);
                 if (!data.success) {
@@ -196,8 +197,7 @@ function BlogPreview() {
             message.error(currentCommentId ? '回复失败' : '评论失败');
         }
     };
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [replyInfo, setReplyInfo] = useState<{ author: string; content: string } | null>(null);
+
 
     return (
         <>
@@ -277,7 +277,7 @@ function BlogPreview() {
                         className="comment-list"
                         itemLayout="horizontal"
                         dataSource={comments}
-                        renderItem={item => (
+                        renderItem={(item: any) => (
                             <CommentItem
                                 // ... 其他属性
                                 // onFocus={() => {
@@ -319,7 +319,7 @@ function BlogPreview() {
                                         </Button>
                                     </div>
                                 )}
-                                {item.replies?.map(reply => (
+                                {item.replies?.map((reply: any) => (
                                     <CommentItem
                                         key={reply.id}
                                         author={reply.user.name}
@@ -327,8 +327,9 @@ function BlogPreview() {
                                         content={reply.content}
                                         datetime={reply.createTime}
                                         likeCount={reply.likeCount}
-                                        onClick={() => handleOnOpenModal(reply)}
-
+                                        onLike={handleLikeComment}
+                                        onOpenModal={handleOnOpenModal}
+                                        item={reply}
                                     />
                                 ))}
                             </CommentItem>

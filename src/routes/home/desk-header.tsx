@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DownOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Dropdown, Space, Divider, theme, Layout, Button, Typography } from 'antd';
+import { Dropdown, Space, Divider, theme, Layout, Button, Typography, Avatar } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { getStore } from '@/utils/store.ts';
 const { Text } = Typography;
@@ -99,6 +99,7 @@ const headerRightComponents: React.FC = () => {
             }}
           >
             <UserOutlined style={{ color: '#666', fontSize: 16 }} />
+            {/* <Avatar size={30} src={getStore({ name: 'userInfo' })?.avatar} /> */}
             <Text strong style={{ color: '#333' }}>
               {getStore({ name: 'userInfo' })?.name}
             </Text>
