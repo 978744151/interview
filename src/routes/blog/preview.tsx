@@ -364,7 +364,6 @@ function BlogPreview() {
                             value={commentContent}
                             onChange={e => setCommentContent(e.target.value)}
                             placeholder="写下你的评论..."
-                            autoFocus
                             ref={textareaRef}
                             onKeyPress={handleKeyPress}
                         />
