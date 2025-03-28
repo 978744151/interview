@@ -1,6 +1,8 @@
 .comment-item {
   margin-bottom: 16px;
-
+  -webkit-user-select: none; /* 阻止文本选择 */
+  -webkit-touch-callout: none; /* 阻止 iOS 长按弹出菜单 */
+  user-select: none; /* 标准属性 */
   .comment-main {
     display: flex;
     gap: 16px;

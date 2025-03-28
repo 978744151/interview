@@ -50,20 +50,7 @@ const CommentItem: React.FC<CommentProps> = ({
             setShowActionSheet(true);
         }, 500);
         setPressTimer(timer);
-    }; const handleClick = () => {
-        if (isMobile) {
-            onReply?.();
-            // 自动聚焦并打开键盘
-            onFocus?.();
-            // 滚动到评论框位置
-            const commentInput = document.querySelector('.comment-input textarea');
-            if (commentInput) {
-                (commentInput as HTMLTextAreaElement).focus();
-                commentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
     };
-
     const handleOnOpenModal = (e: any) => {
         e.stopPropagation();
         onOpenModal?.({
@@ -163,7 +150,7 @@ const CommentItem: React.FC<CommentProps> = ({
                             </div>
                         </div>
                     </div>
-                    <div className="comment-text" onClick={handleOnOpenModal} >  {item.toUserName && <Button type="link" size='small' style={{ color: " #3f3f3f " }}>回复 {item.toUserName}:
+                    <div className="comment-text" onClick={(e) => handleOnOpenModal(e)} >  {item.toUserName && <Button type="link" size='small' style={{ color: " #3f3f3f " }}>回复 {item.toUserName}:
                     </Button>}{content} {!item.parentId && <span className="comment-text-reply" >回复</span>} </div>
                 </div>
             </div>
